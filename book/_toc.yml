@@ -1,0 +1,14 @@
+format: jb-book
+root: index
+parts:
+  - caption: Machine Learning
+    chapters:
+    - file: machine-learning-overview
+    - file: text-processing
+  - caption: YouTube Video Classification
+    chapters:
+    - file: eda
+    - file: modelling
+  - caption: References
+    chapters:
+    - file: references
