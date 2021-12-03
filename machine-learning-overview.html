@@ -177,9 +177,9 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/machine-learning-overview.ipynb"><button type="button"
+        <a class="dropdown-buttons" href="_sources/machine-learning-overview.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
+                data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
             onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
@@ -197,28 +197,42 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/machine-learning-overview.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#apa-itu-machine-learning">
+   Apa Itu
+   <em>
+    Machine Learning
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#jenis-machine-learning">
+   Jenis
+   <em>
+    Machine Learning
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#machine-learning-workflow">
+   <em>
+    Machine Learning Workflow
+   </em>
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -229,9 +243,85 @@
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="machine-learning-an-overview">
 <h1>Machine Learning: An Overview<a class="headerlink" href="#machine-learning-an-overview" title="Permalink to this headline">¶</a></h1>
+<p>Pada notebook ini, kita akan meninjau ulang dasar <em>machine learning</em>. Secara garis besar, topik yang akan kita bahas adalah:</p>
+<ul class="simple">
+<li><p>Apa itu <em>machine learning</em></p></li>
+<li><p>Jenis <em>machine learning</em></p></li>
+<li><p><em>Machine learning workflow</em></p></li>
+</ul>
+<div class="section" id="apa-itu-machine-learning">
+<h2>Apa Itu <em>Machine Learning</em><a class="headerlink" href="#apa-itu-machine-learning" title="Permalink to this headline">¶</a></h2>
+<p>Untuk mendefinisikan <em>machine learning</em>, terlebih dahulu kita perlu tahu apa yang dimaksud dengan <em>learning</em> di sini.</p>
+<p>Learning <span id="id1">[<a class="reference internal" href="references.html#id3">Mitchell, 1997</a>]</span>
+: Sebuah program komputer dikatakan <strong>belajar</strong> dari <strong>pengalaman <em>E</em></strong> dengan suatu <strong>tugas <em>T</em></strong> dan sebuah <strong>metrik <em>P</em></strong>, jika dan hanya jika, performa program komputer tersebut untuk <strong>tugas <em>T</em></strong>, yang diukur oleh <strong>metrik <em>P</em></strong>, semakin baik dengan <strong>pengalaman <em>E</em></strong>.</p>
+<p>Task <em>T</em>
+: Tugas yang dimaksud di sini <strong>bukanlah</strong> proses belajar dari program tersebut. Tugas yang dimaksud di sini adalah <strong>klasifikasi</strong>, <strong>regresi</strong>, <strong><em>machine translation</em></strong> dan lainnya.</p>
+<p>Performance <em>P</em>
+: Sebuah metrik yang mengukur kemampuan program dalam menjalankan suatu tugas <em>T</em> dan biasanya hanya untuk tugas <em>T</em> saja. Contohnya, <strong>akurasi</strong>.</p>
+<p>Experience <em>E</em>
+: Proses belajar dari program yang secara umum dibedakan menjadi <em>supervised</em> dan <em>unsupervised</em> sesuai dengan dataset yang tersedia.</p>
+</div>
+<div class="section" id="jenis-machine-learning">
+<h2>Jenis <em>Machine Learning</em><a class="headerlink" href="#jenis-machine-learning" title="Permalink to this headline">¶</a></h2>
+<p>Secara umum, terdapat 2 jenis <em>machine learning</em> berdasarkan cara belajar suatu program: <strong>supervised</strong> dan <strong>unsupervised</strong>.</p>
+<div class="sphinx-bs container pb-4 docutils">
+<div class="row docutils">
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 shadow docutils">
+<div class="card-header docutils">
+<p class="card-text">Supervised Machine Learning</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">Type of machine learning where the data have a target variable or the ground truth. <em>Task</em> dalam <em>supervised learning</em> terbagi menjadi 2 jenis: <strong>regresi</strong> dan <strong>klasifikasi</strong></p>
+</div>
+</div>
+</div>
+<div class="d-flex col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2 docutils">
+<div class="card w-100 shadow docutils">
+<div class="card-header docutils">
+<p class="card-text">Unsupervised Machine Learning</p>
+</div>
+<div class="card-body docutils">
+<p class="card-text">Type of machine learning where the data doesn’t have a target variable. Beberapa contoh <em>task</em> pada <em>unsupervised learning</em> seperti <em>clustering</em>, <em>dimensionality reduction</em>, <em>anomaly detection</em>, dan lainnya.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="machine-learning-workflow">
+<h2><em>Machine Learning Workflow</em><a class="headerlink" href="#machine-learning-workflow" title="Permalink to this headline">¶</a></h2>
+<p>Untuk dapat melatih sebuah model <em>machine learning</em>, kita perlu melakukan beberapa persiapan.</p>
 <blockquote class="epigraph">
-<div><p>Work in progress…</p>
+<div><p>Good data is <span id="id2">[<a class="reference internal" href="references.html#id4">Ng, 2021</a>]</span>:</p>
+<ul class="simple">
+<li><p>Defined consistently (definition of labels is unambiguous)</p></li>
+<li><p>Cover important cases (good coverage of inputs x)</p></li>
+<li><p>Has timely feedback from production data (covers distribution drift and concept drift)</p></li>
+<li><p>Sized appropriately</p></li>
+</ul>
 </div></blockquote>
+<p>Secara umum, alur kerja <em>machine learning</em> adalah sebagai berikut <span id="id3">[<a class="reference internal" href="references.html#id5">Cloud, 2021</a>]</span>.</p>
+<!-- ![](./assets/images/ml-workflow-google.png) -->
+<div class="figure align-default" id="ml-workflow-google">
+<img alt="_images/ml-workflow-google.png" src="_images/ml-workflow-google.png" />
+<p class="caption"><span class="caption-number">Fig. 1 </span><span class="caption-text">Alur kerja <em>machine learning</em>.</span><a class="headerlink" href="#ml-workflow-google" title="Permalink to this image">¶</a></p>
+</div>
+<p>Dari gambar di atas, langkah pertama adalah <em>source and prepare your data</em>. Langkah ini terdiri dari beberapa hal:</p>
+<ul class="simple">
+<li><p>Ambil data yang dibutuhkan</p></li>
+<li><p>Prapemrosesan data dan <strong><em>data understanding</em></strong></p>
+<ul>
+<li><p>penanganan <em>missing value</em></p></li>
+<li><p><em>feature extraction</em></p></li>
+<li><p><em>feature engineering</em></p></li>
+<li><p>dan lainnya</p></li>
+</ul>
+</li>
+<li><p>Pembagian data menjadi training, development, dan test set</p></li>
+</ul>
+<p>Kita perhatikan juga bahwa tidak ada <em>definition of done</em> pada alur kerja di atas. Hal ini karena kita akan terus memonitor performa model di production dan akan selalu melakukan pembaharuan pada model ataupun dataset dengan <em>versioning</em> keduanya.</p>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
