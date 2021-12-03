@@ -4,6 +4,10 @@ copyright: "2021 Bitlabs Academy"
 logo: ""
 only_build_toc_files: true
 
+parse:
+  myst_enable_extension:
+    - deflist
+
 # references
 bibtex_bibfiles:
   - references.bib
