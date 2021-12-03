@@ -130,3 +130,5 @@ dmypy.json
 
 # jupyter book
 _build/
+
+.DS_STORE
