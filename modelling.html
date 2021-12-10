@@ -42,6 +42,8 @@
     <script src="_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -52,7 +54,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="References" href="references.html" />
-    <link rel="prev" title="Exploratory Data Analysis on YouTube Trending Video Statistics" href="eda.html" />
+    <link rel="prev" title="Machine Learning: An Overview" href="machine-learning-overview.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -102,11 +104,6 @@
    Machine Learning: An Overview
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="text-processing.html">
-   Introduction to Text Processing
-  </a>
- </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
@@ -114,11 +111,6 @@
  </span>
 </p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="eda.html">
-   Exploratory Data Analysis on YouTube Trending Video Statistics
-  </a>
- </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    YouTube Video Category Classification
@@ -219,6 +211,110 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#import-libraries">
+   Import Libraries
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-loading">
+   Data Loading
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exploratory-data-analysis">
+   Exploratory Data Analysis
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#trending-duration">
+     Trending Duration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#most-viewed-liked-and-disliked-video">
+     Most Viewed, Liked, and Disliked Video
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-preparation">
+   Data Preparation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#language-detection">
+     Language Detection
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#feature-extraction">
+     Feature Extraction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#duplicates">
+     Duplicates
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#feature-engineering">
+     Feature Engineering
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#modeling">
+   Modeling
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#model-training-evaluation">
+     Model Training &amp; Evaluation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#hyperparameter-tuning">
+     Hyperparameter Tuning
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#linearsvc">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         LinearSVC
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#randomforestclassifier">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         RandomForestClassifier
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#save-model">
+     Save Model
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -229,9 +325,3219 @@
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="youtube-video-category-classification">
 <h1>YouTube Video Category Classification<a class="headerlink" href="#youtube-video-category-classification" title="Permalink to this headline">¶</a></h1>
-<blockquote class="epigraph">
-<div><p>Work in progress…</p>
-</div></blockquote>
+<p>Pada notebook ini, kita akan mulai untuk membuat model <em>machine learning</em> yang akan mengklasifikasikan kategori video YouTube berdasarkan <strong>judul</strong> dan <strong>deskripsi</strong> video. Data yang akan digunakan adalah data <a class="reference external" href="https://www.kaggle.com/syahrulhamdani/indonesias-trending-youtube-video-statistics">video trending YouTube Indonesia</a>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Setelah selesai mengunduh, sangat disarankan untuk diletakkan dalam folder <code class="docutils literal notranslate"><span class="pre">data</span></code> yang sejajar dengan notebook ini.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="p">|</span>- modelling.ipynb
+<span class="p">|</span>- data
+    <span class="p">|</span>- youtube
+        <span class="p">|</span>- trending.csv
+        <span class="p">|</span>- category.json
+</pre></div>
+</div>
+</div>
+<div class="section" id="import-libraries">
+<h2>Import Libraries<a class="headerlink" href="#import-libraries" title="Permalink to this headline">¶</a></h2>
+<p>Pertama, kita akan import beberapa library yang akan digunakan pada notebook ini.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">wrap</span>
+
+<span class="kn">import</span> <span class="nn">emoji</span>
+<span class="kn">import</span> <span class="nn">joblib</span>
+<span class="kn">import</span> <span class="nn">langdetect</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfVectorizer</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">ConfusionMatrixDisplay</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">GridSearchCV</span>
+<span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="kn">import</span> <span class="n">MultinomialNB</span>
+<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">LinearSVC</span>
+<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;fivethirtyeight&quot;</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/bitlabsinstructor/.pyenv/versions/3.8.11/envs/bitlabs-webinar/lib/python3.8/site-packages/pandas/compat/__init__.py:124: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
+  warnings.warn(msg)
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="data-loading">
+<h2>Data Loading<a class="headerlink" href="#data-loading" title="Permalink to this headline">¶</a></h2>
+<p>Untuk <code class="docutils literal notranslate"><span class="pre">trending.csv</span></code>, kita bisa langsung membaca data tersebut menggunakan <code class="docutils literal notranslate"><span class="pre">pandas</span></code>. Khusus untuk <code class="docutils literal notranslate"><span class="pre">category.json</span></code>, kita akan definisikan fungsi berikut untuk membantu kita membaca data kategori video.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_category_dict</span><span class="p">(</span><span class="n">category_file</span><span class="p">):</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">category_file</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">category</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="n">cat</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="n">cat</span><span class="o">.</span><span class="n">snippet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">category</span><span class="o">.</span><span class="n">itertuples</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Karena alasan teknis, kita hanya akan menggunakan data video trending dari bulan Juli sampai Desember saja.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">category_dict</span> <span class="o">=</span> <span class="n">get_category_dict</span><span class="p">(</span><span class="s2">&quot;data/category.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trending</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;./data/trending.csv&quot;</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;publish_time&quot;</span><span class="p">,</span> <span class="s2">&quot;trending_time&quot;</span><span class="p">])</span>
+
+<span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;display.max_columns&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">trending</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>publish_time</th>
+      <th>channel_id</th>
+      <th>title</th>
+      <th>description</th>
+      <th>thumbnail_url</th>
+      <th>thumbnail_width</th>
+      <th>thumbnail_height</th>
+      <th>channel_name</th>
+      <th>tags</th>
+      <th>category_id</th>
+      <th>live_status</th>
+      <th>local_title</th>
+      <th>local_description</th>
+      <th>duration</th>
+      <th>dimension</th>
+      <th>definition</th>
+      <th>caption</th>
+      <th>license_status</th>
+      <th>allowed_region</th>
+      <th>blocked_region</th>
+      <th>view</th>
+      <th>like</th>
+      <th>dislike</th>
+      <th>favorite</th>
+      <th>comment</th>
+      <th>trending_time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2021-02-05 09:00:34+00:00</td>
+      <td>UCEf_Bc-KVd7onSeifS3py9g</td>
+      <td>aespa 에스파 'Forever (약속)' MV</td>
+      <td>aespa's new single "Forever" is out!\nListen a...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>SMTOWN</td>
+      <td>NaN</td>
+      <td>10</td>
+      <td>none</td>
+      <td>aespa 에스파 'Forever (약속)' MV</td>
+      <td>aespa's new single "Forever" is out!\nListen a...</td>
+      <td>PT5M7S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>True</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>7806846.0</td>
+      <td>857902.0</td>
+      <td>24078.0</td>
+      <td>0</td>
+      <td>94961.0</td>
+      <td>2021-02-07 05:46:51.832614+00:00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2021-02-04 15:54:08+00:00</td>
+      <td>UCYEa4_MC7OFjcWrO6SO-u8g</td>
+      <td>[FULL] Siapa di Balik Kudeta AHY? | Dua Sisi t...</td>
+      <td>Jakarta, https://www.tvonenews.com - Ketua umu...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Indonesia Lawyers Club</td>
+      <td>['tvone', 'tv one', 'tvonenews', 'indonesia la...</td>
+      <td>25</td>
+      <td>none</td>
+      <td>[FULL] Siapa di Balik Kudeta AHY? | Dua Sisi t...</td>
+      <td>Jakarta, https://www.tvonenews.com - Ketua umu...</td>
+      <td>PT42M30S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>885038.0</td>
+      <td>6765.0</td>
+      <td>1263.0</td>
+      <td>0</td>
+      <td>6365.0</td>
+      <td>2021-02-07 05:46:51.832649+00:00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2021-02-06 03:00:22+00:00</td>
+      <td>UCu12RxQjRQyh79YBYvEDkOg</td>
+      <td>CABRIOLET CHALLENGE: TANTANGAN MENGGODA (7/12)</td>
+      <td>Road Party Season 2: Cabriolet Challenge\n\nEp...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Motomobi</td>
+      <td>['MotoMobi', 'Mobil', 'motor', 'review', 'indo...</td>
+      <td>2</td>
+      <td>none</td>
+      <td>CABRIOLET CHALLENGE: TANTANGAN MENGGODA (7/12)</td>
+      <td>Road Party Season 2: Cabriolet Challenge\n\nEp...</td>
+      <td>PT46M43S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>889708.0</td>
+      <td>47895.0</td>
+      <td>532.0</td>
+      <td>0</td>
+      <td>8785.0</td>
+      <td>2021-02-07 05:46:51.832664+00:00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2021-02-05 20:26:08+00:00</td>
+      <td>UCCuzDCoI3EUOo_nhCj4noSw</td>
+      <td>With Windah Basudara &amp; Hans</td>
+      <td>Join this channel to get access to perks:\nhtt...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>yb</td>
+      <td>NaN</td>
+      <td>20</td>
+      <td>none</td>
+      <td>With Windah Basudara &amp; Hans</td>
+      <td>Join this channel to get access to perks:\nhtt...</td>
+      <td>PT45M59S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1006854.0</td>
+      <td>91973.0</td>
+      <td>3967.0</td>
+      <td>0</td>
+      <td>12957.0</td>
+      <td>2021-02-07 05:46:51.832678+00:00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2021-02-03 23:14:54+00:00</td>
+      <td>UC14UlmYlSNiQCBe9Eookf_A</td>
+      <td>🤯 LATE COMEBACK DRAMA! | HIGHLIGHTS | Granada ...</td>
+      <td>With just two minutes to play, Barça looked to...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>FC Barcelona</td>
+      <td>['FC Barcelona', 'برشلونة،', 'Fútbol', 'FUTBOL...</td>
+      <td>17</td>
+      <td>none</td>
+      <td>🤯 LATE COMEBACK DRAMA! | HIGHLIGHTS | Granada ...</td>
+      <td>With just two minutes to play, Barça looked to...</td>
+      <td>PT5M12S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>6275035.0</td>
+      <td>218131.0</td>
+      <td>4289.0</td>
+      <td>0</td>
+      <td>12799.0</td>
+      <td>2021-02-07 05:46:51.832730+00:00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">start_date</span> <span class="o">=</span> <span class="n">trending</span><span class="o">.</span><span class="n">trending_time</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="n">end_date</span> <span class="o">=</span> <span class="n">trending</span><span class="o">.</span><span class="n">trending_time</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">start_date</span> <span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">end_date</span> <span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>start_date = Timestamp(&#39;2021-02-07 05:46:51.832614+0000&#39;, tz=&#39;UTC&#39;)
+end_date = Timestamp(&#39;2021-12-06 06:01:25.828896+0000&#39;, tz=&#39;UTC&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Bisa kita lihat bahwa data video trending dimulai dari bulan <strong>Februari</strong> sampai <strong>Desember</strong>. Untuk itu, kita akan <em>drop</em> data dari bulan <strong>Februai sampai Juni</strong>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filtered_trending</span> <span class="o">=</span> <span class="n">trending</span><span class="p">[</span><span class="n">trending</span><span class="o">.</span><span class="n">trending_time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span> <span class="o">&gt;=</span> <span class="mi">7</span><span class="p">]</span>
+
+<span class="n">start_date</span> <span class="o">=</span> <span class="n">filtered_trending</span><span class="o">.</span><span class="n">trending_time</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="n">end_date</span> <span class="o">=</span> <span class="n">filtered_trending</span><span class="o">.</span><span class="n">trending_time</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">start_date</span> <span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">end_date</span> <span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>start_date = Timestamp(&#39;2021-07-01 06:01:25.524449+0000&#39;, tz=&#39;UTC&#39;)
+end_date = Timestamp(&#39;2021-12-06 06:01:25.828896+0000&#39;, tz=&#39;UTC&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_videos</span> <span class="o">=</span> <span class="n">filtered_trending</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">num_videos</span> <span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>num_videos = 31600
+</pre></div>
+</div>
+</div>
+</div>
+<p>Terdapat <span class="math notranslate nohighlight">\(31.600\)</span> video yang masuk daftar trending setiap harinya dari bulan Juli sampai Desember. Selanjutnya, kita akan lakukan eksplorasi data terlebih dahulu sebelum mulai membuat model <em>machine learning</em>.</p>
+<p>Selanjutnya, mari kita lihat bagaimana distribusi <em>missing value</em> pada masing-masing kolom.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filtered_trending</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+Int64Index: 31600 entries, 21322 to 52921
+Data columns (total 26 columns):
+ #   Column             Non-Null Count  Dtype              
+---  ------             --------------  -----              
+ 0   publish_time       31600 non-null  datetime64[ns, UTC]
+ 1   channel_id         31600 non-null  object             
+ 2   title              31600 non-null  object             
+ 3   description        30194 non-null  object             
+ 4   thumbnail_url      0 non-null      float64            
+ 5   thumbnail_width    0 non-null      float64            
+ 6   thumbnail_height   0 non-null      float64            
+ 7   channel_name       31600 non-null  object             
+ 8   tags               27542 non-null  object             
+ 9   category_id        31600 non-null  int64              
+ 10  live_status        31600 non-null  object             
+ 11  local_title        31600 non-null  object             
+ 12  local_description  30194 non-null  object             
+ 13  duration           31600 non-null  object             
+ 14  dimension          31600 non-null  object             
+ 15  definition         31600 non-null  object             
+ 16  caption            31600 non-null  bool               
+ 17  license_status     31600 non-null  bool               
+ 18  allowed_region     944 non-null    object             
+ 19  blocked_region     1081 non-null   object             
+ 20  view               31600 non-null  float64            
+ 21  like               31275 non-null  float64            
+ 22  dislike            31275 non-null  float64            
+ 23  favorite           31600 non-null  int64              
+ 24  comment            31478 non-null  float64            
+ 25  trending_time      31600 non-null  datetime64[ns, UTC]
+dtypes: bool(2), datetime64[ns, UTC](2), float64(7), int64(2), object(13)
+memory usage: 6.1+ MB
+</pre></div>
+</div>
+</div>
+</div>
+<p>Dari informasi di atas, ada beberapa video yang kolom deskripsinya kosong. Untuk alasan <em>modeling</em> nanti, kita akan hapus video yang tidak memiliki teks deskripsi.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filtered_trending</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="exploratory-data-analysis">
+<h2>Exploratory Data Analysis<a class="headerlink" href="#exploratory-data-analysis" title="Permalink to this headline">¶</a></h2>
+<p>Pertama, karena setiap hari, bahkan setiap beberapa jam, daftar trending di YouTube selalu ada pembaruan, mari kita lihat jumlah video dari hari per hari. Langkah-langkahnya yaitu:</p>
+<ul class="simple">
+<li><p>Kelompokkan data berdasarkan tanggal per hari</p></li>
+<li><p>Hitung jumlah video pada tanggal tersebut</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trending_by_date</span> <span class="o">=</span> <span class="n">filtered_trending</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span>
+    <span class="n">filtered_trending</span><span class="o">.</span><span class="n">trending_time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">date</span>
+<span class="p">)</span>
+<span class="n">num_trending_per_day</span> <span class="o">=</span> <span class="n">trending_by_date</span><span class="o">.</span><span class="n">trending_time</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of videos in trending per day:&quot;</span><span class="p">,</span> <span class="n">num_trending_per_day</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of videos in trending per day: [195 196 197 198 194 193 192 191 190 188 187 185 189 186 184 183]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Jadi, setiap harinya, terdapat <strong>200 video</strong> yang masuk dalam daftar trending YouTube dari tanggal 1 Juli sampai 6 Desember.</p>
+<div class="section" id="trending-duration">
+<h3>Trending Duration<a class="headerlink" href="#trending-duration" title="Permalink to this headline">¶</a></h3>
+<p>Video masuk trending YouTube kadang kala juga bisa bertahan beberapa hari. Lama bertahannya video dalam daftar trending ini mungkin disebabkan oleh beberapa faktor seperti jumlah like, jumlah view, kecepatan kenaikan kedua metrik tersebut, dan lainnya. Mari kita lihat berapa lama durasi suatu video bertahan dalam trending YouTube.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trending_duration</span> <span class="o">=</span> <span class="n">filtered_trending</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+    <span class="n">trending_duration</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s2">&quot;trending_time&quot;</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">),</span>
+    <span class="n">trending_start_date</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s2">&quot;trending_time&quot;</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">),</span>
+    <span class="n">trending_last_date</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s2">&quot;trending_time&quot;</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;trending_duration&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+<span class="n">trending_duration</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>trending_duration</th>
+      <th>trending_start_date</th>
+      <th>trending_last_date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Måneskin - Beggin' (Lyrics/Testo)</td>
+      <td>30</td>
+      <td>2021-07-06 06:01:08.609842+00:00</td>
+      <td>2021-08-14 06:01:09.572758+00:00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Måneskin - Beggin' (Lyrics)</td>
+      <td>30</td>
+      <td>2021-07-09 06:03:40.293908+00:00</td>
+      <td>2021-09-29 06:00:48.508222+00:00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>The Kid LAROI, Justin Bieber - Stay (Lyrics)</td>
+      <td>22</td>
+      <td>2021-08-07 06:00:58.727254+00:00</td>
+      <td>2021-11-02 06:00:52.042819+00:00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Happy Asmara - Lemah Teles (Official Music Liv...</td>
+      <td>21</td>
+      <td>2021-07-19 06:02:49.428626+00:00</td>
+      <td>2021-08-08 06:01:02.782146+00:00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>WONDERLAND INDONESIA by Alffy Rev (ft. Novia B...</td>
+      <td>21</td>
+      <td>2021-08-18 06:00:55.039010+00:00</td>
+      <td>2021-09-07 06:00:48.332429+00:00</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>DENNY CAKNAN FT. NDARBOY GENK - MENDUNG TANPO ...</td>
+      <td>20</td>
+      <td>2021-07-28 06:00:52.529306+00:00</td>
+      <td>2021-08-16 06:01:24.371425+00:00</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Join the BTS #PermissiontoDance Challenge only...</td>
+      <td>20</td>
+      <td>2021-08-07 06:00:58.726624+00:00</td>
+      <td>2021-08-26 06:00:52.511071+00:00</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>MERINDING GUE DENGER INI, GOKIL‼️ SEREM ABIS‼️...</td>
+      <td>20</td>
+      <td>2021-07-02 06:01:02.071087+00:00</td>
+      <td>2021-07-21 06:01:23.252876+00:00</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Create your own short to Shivers using #Sheera...</td>
+      <td>20</td>
+      <td>2021-10-26 06:00:53.187313+00:00</td>
+      <td>2021-11-14 06:01:05.587878+00:00</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>BTS (방탄소년단) 'Permission to Dance' Official MV</td>
+      <td>20</td>
+      <td>2021-07-10 06:01:04.439918+00:00</td>
+      <td>2021-07-29 06:00:56.665583+00:00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+    <span class="n">trending_duration</span><span class="o">.</span><span class="n">title</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">title</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrap</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">))),</span>
+    <span class="n">trending_duration</span><span class="o">.</span><span class="n">trending_duration</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Longest Duration of Videos included in YouTube Trending Video&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Video Title&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Trending Duration (in days)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/modelling_19_0.png" src="_images/modelling_19_0.png" />
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Silakan eksplor lebih jauh lagi untuk durasi sebuah video bertahan dalam daftar trending dalam hal kategori video, channel, dan lainnya.</p>
+</div>
+</div>
+<div class="section" id="most-viewed-liked-and-disliked-video">
+<h3>Most Viewed, Liked, and Disliked Video<a class="headerlink" href="#most-viewed-liked-and-disliked-video" title="Permalink to this headline">¶</a></h3>
+<p>Metrik ini tentu sangat umum dan dijunjung tinggi oleh para kreator konten YouTube. Dengan metrik tersebut, kita juga bisa membuat <em>YouTube Rewind 2021</em> versi sederhana kita sendiri.</p>
+<div class="cell tag_output_scroll docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trending_by_title</span> <span class="o">=</span> <span class="n">filtered_trending</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+<span class="n">trending_rewind</span> <span class="o">=</span> <span class="n">trending_by_title</span><span class="p">[[</span><span class="s2">&quot;view&quot;</span><span class="p">,</span> <span class="s2">&quot;like&quot;</span><span class="p">,</span> <span class="s2">&quot;dislike&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">])</span>
+<span class="n">trending_rewind</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead tr th {
+        text-align: left;
+    }
+
+    .dataframe thead tr:last-of-type th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="4" halign="left">view</th>
+      <th colspan="4" halign="left">like</th>
+      <th colspan="4" halign="left">dislike</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>min</th>
+      <th>max</th>
+      <th>mean</th>
+      <th>sum</th>
+      <th>min</th>
+      <th>max</th>
+      <th>mean</th>
+      <th>sum</th>
+      <th>min</th>
+      <th>max</th>
+      <th>mean</th>
+      <th>sum</th>
+    </tr>
+    <tr>
+      <th>title</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>"BABY R" BIKIN GEMES !!! RAFATHAR CEMBURU, SEMUA KELUARGA REBUTAN GENDONG...</th>
+      <td>2280620.0</td>
+      <td>2637486.0</td>
+      <td>2.459053e+06</td>
+      <td>4918106.0</td>
+      <td>93348.0</td>
+      <td>101207.0</td>
+      <td>97277.500000</td>
+      <td>194555.0</td>
+      <td>1197.0</td>
+      <td>1286.0</td>
+      <td>1241.500000</td>
+      <td>2483.0</td>
+    </tr>
+    <tr>
+      <th>"Emosi Rico Simanjutak" Saat Taisei Marukawa Berhasil Obrak Abrik Pertahanan Persija</th>
+      <td>72434.0</td>
+      <td>116310.0</td>
+      <td>9.390625e+04</td>
+      <td>375625.0</td>
+      <td>990.0</td>
+      <td>1432.0</td>
+      <td>1228.500000</td>
+      <td>4914.0</td>
+      <td>40.0</td>
+      <td>61.0</td>
+      <td>47.750000</td>
+      <td>191.0</td>
+    </tr>
+    <tr>
+      <th>"Grebek rumah harris vriza, dan percintaannya dengan R*cis”</th>
+      <td>68879.0</td>
+      <td>163773.0</td>
+      <td>1.267565e+05</td>
+      <td>760539.0</td>
+      <td>5529.0</td>
+      <td>8714.0</td>
+      <td>7486.833333</td>
+      <td>44921.0</td>
+      <td>46.0</td>
+      <td>74.0</td>
+      <td>63.500000</td>
+      <td>381.0</td>
+    </tr>
+    <tr>
+      <th>"Ini adalah IMPIAN bapa saya" - Tangisan Goh Liu Ying selepas tamat perjalanan di Tokyo | Nadi Arena</th>
+      <td>503651.0</td>
+      <td>822845.0</td>
+      <td>7.171452e+05</td>
+      <td>3585726.0</td>
+      <td>6952.0</td>
+      <td>9144.0</td>
+      <td>8436.200000</td>
+      <td>42181.0</td>
+      <td>165.0</td>
+      <td>264.0</td>
+      <td>234.000000</td>
+      <td>1170.0</td>
+    </tr>
+    <tr>
+      <th>"JANGAN DIKASARIN YA PAK.." CREW SETIA FARM SEDIH, PISAH SAMA GRANDONG</th>
+      <td>1398186.0</td>
+      <td>1398186.0</td>
+      <td>1.398186e+06</td>
+      <td>1398186.0</td>
+      <td>44228.0</td>
+      <td>44228.0</td>
+      <td>44228.000000</td>
+      <td>44228.0</td>
+      <td>718.0</td>
+      <td>718.0</td>
+      <td>718.000000</td>
+      <td>718.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>🤟🏻aespa 'Savage' MV Reaction🤟🏻</th>
+      <td>1011999.0</td>
+      <td>1885538.0</td>
+      <td>1.567651e+06</td>
+      <td>10973554.0</td>
+      <td>127578.0</td>
+      <td>186596.0</td>
+      <td>165558.857143</td>
+      <td>1158912.0</td>
+      <td>1158.0</td>
+      <td>1812.0</td>
+      <td>1578.857143</td>
+      <td>11052.0</td>
+    </tr>
+    <tr>
+      <th>🥰 New Gadgets &amp; Versatile Utensils For Home # 266🏠Appliances, Make Up, Smart Inventions スマートアプライアン</th>
+      <td>330156.0</td>
+      <td>7334655.0</td>
+      <td>3.414214e+06</td>
+      <td>34142143.0</td>
+      <td>2822.0</td>
+      <td>58066.0</td>
+      <td>28320.700000</td>
+      <td>283207.0</td>
+      <td>283.0</td>
+      <td>7540.0</td>
+      <td>3517.500000</td>
+      <td>35175.0</td>
+    </tr>
+    <tr>
+      <th>🥰 New Gadgets &amp; Versatile Utensils For Home # 303🏠Appliances, Make Up, Smart Inventions スマートアプライアン</th>
+      <td>278942.0</td>
+      <td>1212522.0</td>
+      <td>7.948737e+05</td>
+      <td>5564116.0</td>
+      <td>2790.0</td>
+      <td>10212.0</td>
+      <td>6897.571429</td>
+      <td>48283.0</td>
+      <td>335.0</td>
+      <td>1335.0</td>
+      <td>878.000000</td>
+      <td>6146.0</td>
+    </tr>
+    <tr>
+      <th>🥰 New Gadgets &amp; Versatile Utensils For Home # 309🏠Appliances, Make Up, Smart Inventions スマートアプライアン</th>
+      <td>320084.0</td>
+      <td>1097903.0</td>
+      <td>7.562497e+05</td>
+      <td>4537498.0</td>
+      <td>3025.0</td>
+      <td>8759.0</td>
+      <td>6112.333333</td>
+      <td>36674.0</td>
+      <td>434.0</td>
+      <td>1115.0</td>
+      <td>806.500000</td>
+      <td>4839.0</td>
+    </tr>
+    <tr>
+      <th>🩸괴담회에 어서오세요🩸: 첫 번째 이야기 | WELCOME TO NCT’S HORROR NIGHTS</th>
+      <td>1423178.0</td>
+      <td>2966798.0</td>
+      <td>2.629831e+06</td>
+      <td>36817634.0</td>
+      <td>316849.0</td>
+      <td>457809.0</td>
+      <td>429081.142857</td>
+      <td>6007136.0</td>
+      <td>479.0</td>
+      <td>1420.0</td>
+      <td>1238.357143</td>
+      <td>17337.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>6236 rows × 12 columns</p>
+</div></div></div>
+</div>
+<p>Jika kita lihat data di atas, ada beberapa video yang jumlah minimal dan maksimum <code class="docutils literal notranslate"><span class="pre">view</span></code>, <code class="docutils literal notranslate"><span class="pre">like</span></code>, maupun <code class="docutils literal notranslate"><span class="pre">dislike</span></code> yang berbeda. Ini bisa saja dikarenakan video tersebut yang bertahan beberapa hari dalam trending, seperti video <code class="docutils literal notranslate"><span class="pre">&quot;Emosi</span> <span class="pre">Rico</span> <span class="pre">Simanjutak&quot;</span> <span class="pre">Saat</span> <span class="pre">...</span></code> yang dimulai dengan jumlah <code class="docutils literal notranslate"><span class="pre">view</span></code> 72.434 pada awal masuk trending dan pada hari terakhir dalam trending mencapai jumlah <code class="docutils literal notranslate"><span class="pre">view</span></code> 116.310.</p>
+<p>Sekarang, mari kita lihat jumlah maksimal <code class="docutils literal notranslate"><span class="pre">view</span></code>, <code class="docutils literal notranslate"><span class="pre">like</span></code>, dan <code class="docutils literal notranslate"><span class="pre">dislike</span></code> dari video teratas masing-masing tersebut dan bandingkan dengan pada saat awal masuk trending.</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">top_10_liked</span> <span class="o">=</span> <span class="n">trending_rewind</span><span class="p">[</span><span class="s2">&quot;like&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+    <span class="n">top_10_liked</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">title</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrap</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">))),</span>
+    <span class="n">top_10_liked</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">],</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;last like&quot;</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+    <span class="n">top_10_liked</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">title</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrap</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">))),</span>
+    <span class="n">top_10_liked</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">],</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;start like&quot;</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Most videos in trending list improves drastically in terms of likes&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Number of Like&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Video Title&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/modelling_23_0.png" src="_images/modelling_23_0.png" />
+</div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">top_10_viewed</span> <span class="o">=</span> <span class="n">trending_rewind</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+    <span class="n">top_10_viewed</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">title</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrap</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">))),</span>
+    <span class="n">top_10_viewed</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">],</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;last views&quot;</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+    <span class="n">top_10_viewed</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">title</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrap</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">))),</span>
+    <span class="n">top_10_viewed</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">],</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;start views&quot;</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Most videos in trending list improves drastically in terms of views, similar to likes&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Number of Views&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Video Title&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/modelling_24_0.png" src="_images/modelling_24_0.png" />
+</div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">top_10_disliked</span> <span class="o">=</span> <span class="n">trending_rewind</span><span class="p">[</span><span class="s2">&quot;dislike&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+    <span class="n">top_10_disliked</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">title</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrap</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">))),</span>
+    <span class="n">top_10_disliked</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">],</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;last dislike&quot;</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+    <span class="n">top_10_disliked</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">title</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrap</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">))),</span>
+    <span class="n">top_10_disliked</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">],</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;start dislike&quot;</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Most disliked videos in trending list are of shorts and gain more dislikes&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Number of Dislike&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Video Title&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/modelling_25_0.png" src="_images/modelling_25_0.png" />
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Kamu bisa melakukan eksplorasi lebih jauh lagi, seperti:</p>
+<ul class="simple">
+<li><p>most viewed, liked, and disliked channels</p></li>
+<li><p>video age from published until it’s trending</p></li>
+<li><p>dan lainnya</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="data-preparation">
+<h2>Data Preparation<a class="headerlink" href="#data-preparation" title="Permalink to this headline">¶</a></h2>
+<p>Data judul dan deskripsi yang akan kita proses nantinya termasuk ke dalam <em>unstructured data</em> atau teks. Pemrosesan data teks ini termasuk ke dalam bidang NLP (<em>Natural Language Processing</em>)</p>
+<div class="figure align-default" id="nlp-overview">
+<img alt="Overview NLP" src="_images/nlp-overview.gif" />
+<p class="caption"><span class="caption-number">Fig. 2 </span><span class="caption-text">Aplikasi <em>Natural Langauge Processing</em> (<a class="reference external" href="https://s3.amazonaws.com/codecademy-content/courses/NLP/Natural_Language_Processing_Overview.gif">ref</a>)</span><a class="headerlink" href="#nlp-overview" title="Permalink to this image">¶</a></p>
+</div>
+<div class="section" id="language-detection">
+<h3>Language Detection<a class="headerlink" href="#language-detection" title="Permalink to this headline">¶</a></h3>
+<p>Setelah melakukan eksplorasi, sekarang saatnya kita menyiapkan data yang akan digunakan untuk mengklasifikaskan kategori video, yaitu <code class="docutils literal notranslate"><span class="pre">title</span></code> dan <code class="docutils literal notranslate"><span class="pre">description</span></code>.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Kita hanya akan menggunakan video yang judul dan deskripsinya menggunakan bahasa Indonesia.</p>
+</div>
+<p>Karena kita hanya akan menggunakan teks berbahasa Indonesia, kita perlu menyaring mana yang berbahasa Indonesia dan mana yang bukan. Ada banyak <em>library</em> yang bisa kita gunakan, salah satunya adalah <a class="reference external" href="https://spacy.io/"><code class="docutils literal notranslate"><span class="pre">spacy</span></code></a>. Tapi, karena alasan teknis, kita hanya akan menggunakan <em>library</em> yang lebih sederhana, yaitu <a class="reference external" href="https://github.com/Mimino666/langdetect"><code class="docutils literal notranslate"><span class="pre">langdetect</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Jika kamu belum menginstall <code class="docutils literal notranslate"><span class="pre">langdetect</span></code>, install dengan perintah berikut:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install langdetect
+</pre></div>
+</div>
+</div>
+<p>Sebagai contoh, perhatikan sampel judul dan deskripsi video berikut.</p>
+<div class="cell tag_output_scroll docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample</span> <span class="o">=</span> <span class="n">filtered_trending</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">sample</span><span class="p">[[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>36912</th>
+      <td>REAKSI ORANG JEPANG NYOBAIN JUS ALPUKAT</td>
+      <td>Begini reaksi Yoshi pertama kali nyobain jus a...</td>
+    </tr>
+    <tr>
+      <th>38941</th>
+      <td>Pengamen yang bisa mainin lagu ini gue kasih 1...</td>
+      <td>Pengamen sekarang keren-keren banget alatnya l...</td>
+    </tr>
+    <tr>
+      <th>48089</th>
+      <td>TREASURE - WEB DRAMA '남고괴담' CHARACTER INTERVIEW</td>
+      <td>남고괴담 비하인드 스토리 구매하기\nhttps://weverseshop.onelin...</td>
+    </tr>
+    <tr>
+      <th>24766</th>
+      <td>(YB &amp; Heiakim) Hello Goodbye - Sungha Jung X YB</td>
+      <td>(YB &amp; Heiakim) Hello Goodbye - Sungha Jung X Y...</td>
+    </tr>
+    <tr>
+      <th>50307</th>
+      <td>Memecahkan Misteri Tantangan 1000 Kunci #2 Mul...</td>
+      <td>Jika ada brankas tertutup di depanmu, kau past...</td>
+    </tr>
+    <tr>
+      <th>47844</th>
+      <td>aespa 에스파 'Savage' Squid Game ver. Dance Practice</td>
+      <td>'Savage' MV hits 100M views!\nThank you so muc...</td>
+    </tr>
+    <tr>
+      <th>46357</th>
+      <td>PMPL SEA Championship S4 | Superweekend 3 Day ...</td>
+      <td>SUPERWEEKEND TERAKHIR PENENTUAN 1 TIKET PERTAM...</td>
+    </tr>
+    <tr>
+      <th>23245</th>
+      <td>DAY6 (Even of Day) "Right Through Me(뚫고 지나가요)"...</td>
+      <td>DAY6 (Even of Day) "Right Through Me(뚫고 지나가요)"...</td>
+    </tr>
+    <tr>
+      <th>24599</th>
+      <td>DJ SETIAP YANG KU LAKUKAN  UNTUK DIRIMU VIRAL ...</td>
+      <td>----------------------------------------------...</td>
+    </tr>
+    <tr>
+      <th>27364</th>
+      <td>EP. 24 : Nekat Riding ke Area Rawan di Colombia</td>
+      <td>#WheelStory #MarioIroth #HondaAfricaTwin\n\nSe...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample</span><span class="p">[</span><span class="s2">&quot;title_lang&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">title</span><span class="p">:</span> <span class="n">langdetect</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">title</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span>
+<span class="n">sample</span><span class="p">[</span><span class="s2">&quot;desc_lang&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">desc</span><span class="p">:</span> <span class="n">langdetect</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">desc</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_output_scroll docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;display.max_colwidth&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">sample</span><span class="p">[[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;title_lang&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;desc_lang&quot;</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>title_lang</th>
+      <th>description</th>
+      <th>desc_lang</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>36912</th>
+      <td>REAKSI ORANG JEPANG NYOBAIN JUS ALPUKAT</td>
+      <td>id</td>
+      <td>Begini reaksi Yoshi pertama kali nyobain jus alpukat! \nKalo di Jepang, alpukat dimakannya pake ...</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>38941</th>
+      <td>Pengamen yang bisa mainin lagu ini gue kasih 100 dollar | #Nantangin</td>
+      <td>id</td>
+      <td>Pengamen sekarang keren-keren banget alatnya lengkap.\nShoutout to pengamen-pengamen Bandung.\n\...</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>48089</th>
+      <td>TREASURE - WEB DRAMA '남고괴담' CHARACTER INTERVIEW</td>
+      <td>en</td>
+      <td>남고괴담 비하인드 스토리 구매하기\nhttps://weverseshop.onelink.me/BZSY/9595f182 \n\n#TREASURE #트레저 #남고괴담 #TheMy...</td>
+      <td>en</td>
+    </tr>
+    <tr>
+      <th>24766</th>
+      <td>(YB &amp; Heiakim) Hello Goodbye - Sungha Jung X YB</td>
+      <td>so</td>
+      <td>(YB &amp; Heiakim) Hello Goodbye - Sungha Jung X YB\n\nTuning : Standard\n\nOriginal : https://youtu...</td>
+      <td>en</td>
+    </tr>
+    <tr>
+      <th>50307</th>
+      <td>Memecahkan Misteri Tantangan 1000 Kunci #2 Multi DO Challenge</td>
+      <td>id</td>
+      <td>Jika ada brankas tertutup di depanmu, kau pasti ingin tahu apa isinya! Pahlawan kita juga sangat...</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>47844</th>
+      <td>aespa 에스파 'Savage' Squid Game ver. Dance Practice</td>
+      <td>fr</td>
+      <td>'Savage' MV hits 100M views!\nThank you so much for your love and support 😘\n\nListen and downlo...</td>
+      <td>en</td>
+    </tr>
+    <tr>
+      <th>46357</th>
+      <td>PMPL SEA Championship S4 | Superweekend 3 Day 1 | FULL TEAM INDONESIA DI SUPERWEEKEND</td>
+      <td>en</td>
+      <td>SUPERWEEKEND TERAKHIR PENENTUAN 1 TIKET PERTAMA MENUJU PMGC! Seteleh 2 hari Weekdays yang cukup ...</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>23245</th>
+      <td>DAY6 (Even of Day) "Right Through Me(뚫고 지나가요)" LIVE CLIP</td>
+      <td>en</td>
+      <td>DAY6 (Even of Day) "Right Through Me(뚫고 지나가요)" LIVE CLIP\n\nListen to DAY6 (Even of Day) "Right ...</td>
+      <td>en</td>
+    </tr>
+    <tr>
+      <th>24599</th>
+      <td>DJ SETIAP YANG KU LAKUKAN  UNTUK DIRIMU VIRAL TIKTOK BAHAGIA SLOW BEAT SYAHDU</td>
+      <td>id</td>
+      <td>-------------------------------------------------------------\n Judul : DJ SETIAP YANG KU LAKUKA...</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>27364</th>
+      <td>EP. 24 : Nekat Riding ke Area Rawan di Colombia</td>
+      <td>id</td>
+      <td>#WheelStory #MarioIroth #HondaAfricaTwin\n\nSetelah Ecuador negara selanjutnya yang saya jelajah...</td>
+      <td>id</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Perhatikan bahwa sebelum <code class="docutils literal notranslate"><span class="pre">langdetect.detect</span></code>, <code class="docutils literal notranslate"><span class="pre">title</span></code> dan <code class="docutils literal notranslate"><span class="pre">deskripsi</span></code> dijadikan <em>lowercase</em>. Ini dilakukan supaya <code class="docutils literal notranslate"><span class="pre">langdetect</span></code> dapat mendeteksi bahasa secara maksimal.</p>
+</div>
+<p>Ada beberapa kasus yang mungkin terjadi untuk deteksi bahasa pada judul dan deskripsi di atas:</p>
+<ul class="simple">
+<li><p>Judul berbahasa Indonesia, sedangkan deskripsi dideteksi sebagai bahasa asing (yang mungkin seharusnya bahasa Indonesia)</p></li>
+<li><p>Deksripsi dideteksi sebagai bahasa Indonesia, sedangkan judul berbahasa asing (yang mungkin seharusnya bahasa Indonesia)</p></li>
+<li><p>Baik judul atau deskripsi dideteksi sebagai bahasa asing, yang seharusnya salah satu atau keduanya berbahasa Indonesia</p></li>
+</ul>
+<p>Untuk kemungkinan ketiga, kita tidak akan menggunakan video yang judul dan deskripsinya dideteksi sebagai bahasa asing, meskipun seharusnya salah deteksi.  Sekarang, mari kita deteksi bahasa untuk semua video dalam <code class="docutils literal notranslate"><span class="pre">filtered_trending</span></code>.</p>
+<p>Pertama, kita akan buat fungsi yang akan mendeteksi bahasa dari sebuah teks sebagai berikut.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">detect_language</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Detect language of the `text`.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">lang</span> <span class="o">=</span> <span class="n">langdetect</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lang</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filtered_trending</span><span class="p">[</span><span class="s2">&quot;title_lang&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtered_trending</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">detect_language</span><span class="p">)</span>
+<span class="n">filtered_trending</span><span class="p">[</span><span class="s2">&quot;desc_lang&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtered_trending</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">detect_language</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_output_scroll docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filtered_trending</span><span class="p">[[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;title_lang&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;desc_lang&quot;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>title_lang</th>
+      <th>description</th>
+      <th>desc_lang</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>21322</th>
+      <td>NCT DREAM 엔시티 드림 'Hello Future' MV</td>
+      <td>it</td>
+      <td>NCT DREAM's 1st Album Repackage "Hello Future"...</td>
+      <td>en</td>
+    </tr>
+    <tr>
+      <th>21323</th>
+      <td>PART 3 // SUTRISNO DAN ENDANG BAHAGIA</td>
+      <td>de</td>
+      <td>Find me on sosial media :\n\nInstagram : https...</td>
+      <td>en</td>
+    </tr>
+    <tr>
+      <th>21324</th>
+      <td>This isn't David Copperfield Magic trick😂 #sho...</td>
+      <td>en</td>
+      <td>Thank you for watching.\nSubscribe to Tsuriki ...</td>
+      <td>en</td>
+    </tr>
+    <tr>
+      <th>21325</th>
+      <td>Rizky Billar - Pemimpinmu | Official Music Video</td>
+      <td>it</td>
+      <td>Rizky Billar - Pemimpinmu | Official Music Vid...</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>21326</th>
+      <td>Ini Pengakuan Pengemudi Pajero usai Rusak dan ...</td>
+      <td>id</td>
+      <td>Polisi menangkap pengemudi SUV yang merusak da...</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>52916</th>
+      <td>ARSY DAN THALIA ONSU DUET SAMPAI BIKIN RAFFI A...</td>
+      <td>de</td>
+      <td>Gemes! Arsy dan Thalia Putri Onsu duet nyanyi ...</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>52918</th>
+      <td>Beli barang aneh yang dijual ONLINE Episode 20!</td>
+      <td>id</td>
+      <td>Banyak lap nya.\n\nDapatkan Betadine Cold Defe...</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>52919</th>
+      <td>Layangan Putus | Highlight EP02 Senyum Bahagia...</td>
+      <td>id</td>
+      <td>Yuk tonton full episodenya, GRATIS melalui app...</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>52920</th>
+      <td>PAULA LEMES , GA BISA NGOMONG APA2..</td>
+      <td>hu</td>
+      <td>=================================\r\n\r\nSocia...</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>52921</th>
+      <td>PRANK RICIS &amp; TEUKU RYAN YG LAGI HONEYMOON! NG...</td>
+      <td>en</td>
+      <td>Hi baby!\n\nDi video ini aku akan ajak kalian ...</td>
+      <td>en</td>
+    </tr>
+  </tbody>
+</table>
+<p>30194 rows × 4 columns</p>
+</div></div></div>
+</div>
+<p>Setelah kita selesai mendeteksi bahasa pada <code class="docutils literal notranslate"><span class="pre">title</span></code> dan <code class="docutils literal notranslate"><span class="pre">description</span></code>, langkah selanjutnya adalah membuang data yang <code class="docutils literal notranslate"><span class="pre">title</span></code> atau <code class="docutils literal notranslate"><span class="pre">description</span></code> bukan <code class="docutils literal notranslate"><span class="pre">id</span></code>, yaitu tidak berbahasa Indonesia.</p>
+<div class="cell tag_output_scroll docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">indo_trending</span> <span class="o">=</span> <span class="n">filtered_trending</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+    <span class="p">(</span><span class="n">filtered_trending</span><span class="o">.</span><span class="n">title_lang</span> <span class="o">==</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">filtered_trending</span><span class="o">.</span><span class="n">desc_lang</span> <span class="o">==</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;display.max_columns&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">indo_trending</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>publish_time</th>
+      <th>channel_id</th>
+      <th>title</th>
+      <th>description</th>
+      <th>thumbnail_url</th>
+      <th>thumbnail_width</th>
+      <th>thumbnail_height</th>
+      <th>channel_name</th>
+      <th>tags</th>
+      <th>category_id</th>
+      <th>live_status</th>
+      <th>local_title</th>
+      <th>local_description</th>
+      <th>duration</th>
+      <th>dimension</th>
+      <th>definition</th>
+      <th>caption</th>
+      <th>license_status</th>
+      <th>allowed_region</th>
+      <th>blocked_region</th>
+      <th>view</th>
+      <th>like</th>
+      <th>dislike</th>
+      <th>favorite</th>
+      <th>comment</th>
+      <th>trending_time</th>
+      <th>title_lang</th>
+      <th>desc_lang</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>48875</th>
+      <td>2021-11-05 04:30:02+00:00</td>
+      <td>UCuMAjEaSMj7q7YLf0xW1MjQ</td>
+      <td>Momen Haru Ayah Vanessa Angel Kecup Peti Usai ...</td>
+      <td>Tonton video lengkapnya disini: http://detik.i...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>detikcom</td>
+      <td>['detikcom', '20detik', 'Momen', 'Haru', 'Ayah...</td>
+      <td>24</td>
+      <td>none</td>
+      <td>Momen Haru Ayah Vanessa Angel Kecup Peti Usai ...</td>
+      <td>Tonton video lengkapnya disini: http://detik.i...</td>
+      <td>PT1M46S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>750100.0</td>
+      <td>3921.0</td>
+      <td>201.0</td>
+      <td>0</td>
+      <td>438.0</td>
+      <td>2021-11-15 06:02:48.689656+00:00</td>
+      <td>id</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>27523</th>
+      <td>2021-07-27 14:00:14+00:00</td>
+      <td>UC7FE8E7nCP-sJO8o4FTo93Q</td>
+      <td>DENNY CAKNAN FT. NDARBOY GENK - MENDUNG TANPO ...</td>
+      <td>DENNY CAKNAN FT. NDARBOY GENK - MENDUNG TANPO ...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>DC. PRODUCTION</td>
+      <td>['dc musik', 'DENNY CAKNAN', 'NDARBOY GENK', '...</td>
+      <td>10</td>
+      <td>none</td>
+      <td>DENNY CAKNAN FT. NDARBOY GENK - MENDUNG TANPO ...</td>
+      <td>DENNY CAKNAN FT. NDARBOY GENK - MENDUNG TANPO ...</td>
+      <td>PT5M1S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>True</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>3504271.0</td>
+      <td>129698.0</td>
+      <td>2156.0</td>
+      <td>0</td>
+      <td>15208.0</td>
+      <td>2021-08-01 06:00:51.095946+00:00</td>
+      <td>en</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>21989</th>
+      <td>2021-06-22 05:00:14+00:00</td>
+      <td>UCqXWjpE38rpAvb6lPUdDmEQ</td>
+      <td>Rey Mbayang - Sempurnakan Hariku (Official Mus...</td>
+      <td>Title: Sempurnakan Hariku \nArtist: Rey Mbayan...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Falcon Music Indonesia</td>
+      <td>['Falcon', 'Music']</td>
+      <td>10</td>
+      <td>none</td>
+      <td>Rey Mbayang - Sempurnakan Hariku (Official Mus...</td>
+      <td>Title: Sempurnakan Hariku \nArtist: Rey Mbayan...</td>
+      <td>PT4M51S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>4686936.0</td>
+      <td>402052.0</td>
+      <td>4699.0</td>
+      <td>0</td>
+      <td>54360.0</td>
+      <td>2021-07-04 06:00:53.053255+00:00</td>
+      <td>id</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>37182</th>
+      <td>2021-09-13 09:25:05+00:00</td>
+      <td>UC0zTYTRQe77tnOIS03HaNeg</td>
+      <td>Tretan Muslim Pilih Jualan Bakso Daripada Seko...</td>
+      <td>#Part01 #TretanMuslim #DanielTetanggaKamu\n\nH...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Daniel Mananta Network</td>
+      <td>['daniel', 'mananta', 'fremantle', 'media', 'i...</td>
+      <td>24</td>
+      <td>none</td>
+      <td>Tretan Muslim Pilih Jualan Bakso Daripada Seko...</td>
+      <td>#Part01 #TretanMuslim #DanielTetanggaKamu\n\nH...</td>
+      <td>PT22M20S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>483206.0</td>
+      <td>19087.0</td>
+      <td>218.0</td>
+      <td>0</td>
+      <td>924.0</td>
+      <td>2021-09-18 06:01:04.090491+00:00</td>
+      <td>id</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>42192</th>
+      <td>2021-10-10 02:00:01+00:00</td>
+      <td>UCpHFv-GHkos-LdpQlGB7Zng</td>
+      <td>Kompilasi Squid Game Boneka Baik</td>
+      <td>Boneka Omo Squid Game ingin jadi Baik. Joni me...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>FILUCUPI</td>
+      <td>NaN</td>
+      <td>1</td>
+      <td>none</td>
+      <td>Kompilasi Squid Game Boneka Baik</td>
+      <td>Boneka Omo Squid Game ingin jadi Baik. Joni me...</td>
+      <td>PT8M20S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>319586.0</td>
+      <td>6830.0</td>
+      <td>485.0</td>
+      <td>0</td>
+      <td>341.0</td>
+      <td>2021-10-13 06:01:17.448145+00:00</td>
+      <td>id</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>31983</th>
+      <td>2021-08-16 14:10:26+00:00</td>
+      <td>UCmxAIW7RDDC88EPk4ry16Kg</td>
+      <td>Presiden Afghanistan Kabur Bawa Mobil dan Heli...</td>
+      <td>TRIBUN-VIDEO.COM - Diketahui Presiden Afghanis...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Tribunnews</td>
+      <td>['Tribunnews', 'tribun video', 'tribun', 'Pres...</td>
+      <td>25</td>
+      <td>none</td>
+      <td>Presiden Afghanistan Kabur Bawa Mobil dan Heli...</td>
+      <td>TRIBUN-VIDEO.COM - Diketahui Presiden Afghanis...</td>
+      <td>PT3M24S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2045502.0</td>
+      <td>14059.0</td>
+      <td>1179.0</td>
+      <td>0</td>
+      <td>5029.0</td>
+      <td>2021-08-23 06:01:31.450836+00:00</td>
+      <td>id</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>52538</th>
+      <td>2021-12-02 15:59:29+00:00</td>
+      <td>UCU_fuBEbZ0Wcf3ZNWEtxwzg</td>
+      <td>Prahara Warisan &amp; Hak Asuh Anak Alm. Vanessa A...</td>
+      <td>Tanggal Tayang: 02/12/2021\n\nPrahara mengenai...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Hotman Paris Show</td>
+      <td>['iNews', 'Hotman Paris Show', 'Hotman Paris',...</td>
+      <td>24</td>
+      <td>none</td>
+      <td>Prahara Warisan &amp; Hak Asuh Anak Alm. Vanessa A...</td>
+      <td>Tanggal Tayang: 02/12/2021\n\nPrahara mengenai...</td>
+      <td>PT15M29S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1217411.0</td>
+      <td>32163.0</td>
+      <td>627.0</td>
+      <td>0</td>
+      <td>3124.0</td>
+      <td>2021-12-05 06:00:55.757787+00:00</td>
+      <td>id</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>35054</th>
+      <td>2021-09-04 13:17:12+00:00</td>
+      <td>UCaxNFw2ryxzjSAxRVP-0Dfg</td>
+      <td>Saat Teduh Bersama - JANGAN TUNDA KESELAMATAN ...</td>
+      <td>Di jaman seperti ini kesempatan tidak tentu da...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Philip Mantofa</td>
+      <td>['Christianity', 'Holy Spirit', 'Jesus', 'Mira...</td>
+      <td>29</td>
+      <td>none</td>
+      <td>Saat Teduh Bersama - JANGAN TUNDA KESELAMATAN ...</td>
+      <td>Di jaman seperti ini kesempatan tidak tentu da...</td>
+      <td>PT1H9M28S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>141464.0</td>
+      <td>11426.0</td>
+      <td>102.0</td>
+      <td>0</td>
+      <td>1033.0</td>
+      <td>2021-09-07 06:00:48.332164+00:00</td>
+      <td>en</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>39753</th>
+      <td>2021-09-28 08:41:15+00:00</td>
+      <td>UCwIzd032IQjvJ9larkdcwgg</td>
+      <td>YA AMPUN, AKU BOKEK! || Kiat dan Trik Orang Ka...</td>
+      <td>Jadi tajir itu memang keren banget! Tapi hanya...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>123 GO! GOLD Indonesian</td>
+      <td>['123', '123 go', '123go', '123 go gold', '123...</td>
+      <td>24</td>
+      <td>none</td>
+      <td>YA AMPUN, AKU BOKEK! || Kiat dan Trik Orang Ka...</td>
+      <td>Jadi tajir itu memang keren banget! Tapi hanya...</td>
+      <td>PT30M21S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1066896.0</td>
+      <td>10711.0</td>
+      <td>1794.0</td>
+      <td>0</td>
+      <td>415.0</td>
+      <td>2021-10-01 06:01:28.506925+00:00</td>
+      <td>id</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>46383</th>
+      <td>2021-11-01 16:15:02+00:00</td>
+      <td>UCDYTV5VU6XOSosqzx9gNABQ</td>
+      <td>PARA JURI DI BUAT TAK PERCAYA DENGAN NASTASYA ...</td>
+      <td>Para Juri Di Buat Tak Percaya Dengan Natasyah ...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>KDI MNCTV</td>
+      <td>['rhoma irama ngantri kdi', 'bunda hetty ngant...</td>
+      <td>10</td>
+      <td>none</td>
+      <td>PARA JURI DI BUAT TAK PERCAYA DENGAN NASTASYA ...</td>
+      <td>Para Juri Di Buat Tak Percaya Dengan Natasyah ...</td>
+      <td>PT5M31S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>150515.0</td>
+      <td>4387.0</td>
+      <td>67.0</td>
+      <td>0</td>
+      <td>184.0</td>
+      <td>2021-11-03 06:00:50.788689+00:00</td>
+      <td>id</td>
+      <td>id</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="feature-extraction">
+<h3>Feature Extraction<a class="headerlink" href="#feature-extraction" title="Permalink to this headline">¶</a></h3>
+<p>Selanjutnya, kita akan membuang semua fitur/kolom yang tidak diperlukan. Dalam hal ini, kita hanya akan memerlukan <code class="docutils literal notranslate"><span class="pre">title</span></code>, <code class="docutils literal notranslate"><span class="pre">descrption</span></code>, dan <code class="docutils literal notranslate"><span class="pre">category_id</span></code>. Sehingga, kolom lainnya akan dibuang.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">indo_trending</span><span class="p">[[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;category_id&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_output_scroll docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>description</th>
+      <th>category_id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Rizky Billar - Pemimpinmu | Official Music Video</td>
+      <td>Rizky Billar - Pemimpinmu | Official Music Vid...</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Ini Pengakuan Pengemudi Pajero usai Rusak dan ...</td>
+      <td>Polisi menangkap pengemudi SUV yang merusak da...</td>
+      <td>25</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Aksi Demo Tolak Kedatangan Jokowi di Kendari B...</td>
+      <td>Tanggal Tayang: 30/06/2021\n\nProgram berita h...</td>
+      <td>25</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>PERTAMA KALI LIAT SAPI SEGEDE GINI, DINAIKIN D...</td>
+      <td>Assalamualaikum gaeess..! sudah nonton video s...</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>PODKESMAS SAMPAI GA NYAMAN DIBAHAS DISINI - To...</td>
+      <td>Talk show malam yang akan memberikan informasi...</td>
+      <td>24</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>17734</th>
+      <td>Nazia Marwiana - Kehadiran Cinta (Official Mus...</td>
+      <td>Official Music Live from Nazia Marwiana - Keha...</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>17735</th>
+      <td>ARSY DAN THALIA ONSU DUET SAMPAI BIKIN RAFFI A...</td>
+      <td>Gemes! Arsy dan Thalia Putri Onsu duet nyanyi ...</td>
+      <td>24</td>
+    </tr>
+    <tr>
+      <th>17736</th>
+      <td>Beli barang aneh yang dijual ONLINE Episode 20!</td>
+      <td>Banyak lap nya.\n\nDapatkan Betadine Cold Defe...</td>
+      <td>28</td>
+    </tr>
+    <tr>
+      <th>17737</th>
+      <td>Layangan Putus | Highlight EP02 Senyum Bahagia...</td>
+      <td>Yuk tonton full episodenya, GRATIS melalui app...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>17738</th>
+      <td>PAULA LEMES , GA BISA NGOMONG APA2..</td>
+      <td>=================================\r\n\r\nSocia...</td>
+      <td>24</td>
+    </tr>
+  </tbody>
+</table>
+<p>17739 rows × 3 columns</p>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="duplicates">
+<h3>Duplicates<a class="headerlink" href="#duplicates" title="Permalink to this headline">¶</a></h3>
+<p>Jika kita perhatikan secara teliti, kita akan temukan bahwa ada beberapa <code class="docutils literal notranslate"><span class="pre">title</span></code> ataupun <code class="docutils literal notranslate"><span class="pre">desription</span></code> yang duplikat. Hal in dikarenakan adanya kemungkinan sebuah video masuk dalam daftar trending pada hari yang berbeda. Untuk alasan <em>fairness</em>, kita akan membuang beberapa duplikat tersebut.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(3652, 3)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Setelah membuang beberapa duplikat, hanya tersisa <strong>3643</strong> baris data saja yang akan kita gunakan pada fase <em>modeling</em>.</p>
+</div>
+<div class="section" id="feature-engineering">
+<h3>Feature Engineering<a class="headerlink" href="#feature-engineering" title="Permalink to this headline">¶</a></h3>
+<p>Kita tahu bahwa biasanya kreator konten suka menggunakan emoji di judul ataupun deskripsi video mereka. Emoji ini mungkin bisa menggambarkan judul dan deskripsi. Oleh karena itu, kita akan coba mengubah emoji tersebut ke dalam bentuk teks menggunakan library <code class="docutils literal notranslate"><span class="pre">emoji</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Silakan install terlebih dahulu library <code class="docutils literal notranslate"><span class="pre">emoji</span></code> dengan perintah berikut.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install emoji
+</pre></div>
+</div>
+</div>
+<p>Sebelum itu, mari kita ada berapa judul yang menggunakan emoji di dalamnya.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">list_emoji</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">emoji</span><span class="o">.</span><span class="n">UNICODE_EMOJI</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;en&quot;</span><span class="p">)]</span>
+
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">em</span> <span class="ow">in</span> <span class="n">list_emoji</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">title</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">em</span> <span class="ow">in</span> <span class="n">title</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;How many titles use emoji?&quot;</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>How many titles use emoji? 534
+</pre></div>
+</div>
+</div>
+</div>
+<p>Ternyata ada 538 video yang judul nya menggunakan emoji. Kita akan buat fungsi untuk menerjemahkan emoji di dalam judul sebagai berikut.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">demojize</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">em</span> <span class="ow">in</span> <span class="n">list_emoji</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">em</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">em_text</span> <span class="o">=</span> <span class="n">emoji</span><span class="o">.</span><span class="n">demojize</span><span class="p">(</span><span class="n">em</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">em</span><span class="p">,</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">em_text</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;title_emoji&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">demojize</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Mari kita lihat beberapa sampel judul yang menggunakan emoji dan bagaimana bentuk representasi teksnya.</p>
+<div class="cell tag_output_scroll docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">title_with_emoji_idx</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">title</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">em</span> <span class="ow">in</span> <span class="n">list_emoji</span>
+    <span class="k">if</span> <span class="n">em</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_output_scroll docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;display.max_colwidth&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">title_with_emoji_idx</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>description</th>
+      <th>category_id</th>
+      <th>title_emoji</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>34</th>
+      <td>Dari Jendela Smp : GREGETTT...Wih kelihatannya Wulan jadi primadona di SMA Merdeka Mandiri nih...❤</td>
+      <td>Saksikan #DariJendelaSMP Setiap Hari Pkl. 16.40 WIB hanya di @Surya Citra Televisi (SCTV) \n@sin...</td>
+      <td>24</td>
+      <td>Dari Jendela Smp : GREGETTT...Wih kelihatannya Wulan jadi primadona di SMA Merdeka Mandiri nih.....</td>
+    </tr>
+    <tr>
+      <th>79</th>
+      <td>BIKIN CEWEK TERPESONA 😍 Aksi Heroik Driver Muda Menolong Sopir Yang Kesulitan di Sitinjau Lauik</td>
+      <td>Aksi heroik driver muda membantu sopir minibus yang kesulitan di Sitinjau Lauik\n\ninstagram : h...</td>
+      <td>2</td>
+      <td>BIKIN CEWEK TERPESONA  :smiling_face_with_heart-eyes:  Aksi Heroik Driver Muda Menolong Sopir Ya...</td>
+    </tr>
+    <tr>
+      <th>81</th>
+      <td>15 MENIT MEMBAKAR LEMAK 1 Kg !!! 24 Jam TIMBANGAN TURUN ✅ ✅ ✅</td>
+      <td>15 menit membakar lemak, ok ! siapa yg workout mengharapkan bisa membakar 1 kg lemak dalam 15 me...</td>
+      <td>26</td>
+      <td>15 MENIT MEMBAKAR LEMAK 1 Kg !!! 24 Jam TIMBANGAN TURUN  :check_mark_button:   :check_mark_butto...</td>
+    </tr>
+    <tr>
+      <th>148</th>
+      <td>WHY‼️ SAYA DISOMASI, TOLOOONG...- Deddy Corbuzier Podcast</td>
+      <td>#somasi #odgj #podcast\nTEMAN TEMAN KONTEN CREATOR, JANGAN TAKUT BERKARYA SELAMA TUJUAN KALIAN B...</td>
+      <td>24</td>
+      <td>WHY :double_exclamation_mark:  SAYA DISOMASI, TOLOOONG...- Deddy Corbuzier Podcast</td>
+    </tr>
+    <tr>
+      <th>148</th>
+      <td>WHY‼️ SAYA DISOMASI, TOLOOONG...- Deddy Corbuzier Podcast</td>
+      <td>#somasi #odgj #podcast\nTEMAN TEMAN KONTEN CREATOR, JANGAN TAKUT BERKARYA SELAMA TUJUAN KALIAN B...</td>
+      <td>24</td>
+      <td>WHY :double_exclamation_mark:  SAYA DISOMASI, TOLOOONG...- Deddy Corbuzier Podcast</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>3535</th>
+      <td>MAKIN PSIKOPAT NIH ORG‼️🤣 - RADITYA DIKA - Deddy Corbuzier Podcast</td>
+      <td>#radityadika #klarifikasi #podcast</td>
+      <td>24</td>
+      <td>MAKIN PSIKOPAT NIH ORG :double_exclamation_mark:  :rolling_on_the_floor_laughing:  - RADITYA DIK...</td>
+    </tr>
+    <tr>
+      <th>3537</th>
+      <td>AKHIRNYA KETEMU KELUARGA!! SURPRISE KASIH HADIAH, TERHARU 😭</td>
+      <td>Konnijiwa! Di video kali ini, akhirnyaaaa aku selesai karantina dan aku bisa ketemu sama keluarg...</td>
+      <td>22</td>
+      <td>AKHIRNYA KETEMU KELUARGA!! SURPRISE KASIH HADIAH, TERHARU  :loudly_crying_face:</td>
+    </tr>
+    <tr>
+      <th>3539</th>
+      <td>Bibi Korea sakit, obatnya makan rasa pedas Indonesia!!🔥🔥</td>
+      <td>#SuwirIkan#수위르이깐\nMukbang ikan + sambal!!!</td>
+      <td>24</td>
+      <td>Bibi Korea sakit, obatnya makan rasa pedas Indonesia!! :fire:  :fire:</td>
+    </tr>
+    <tr>
+      <th>3580</th>
+      <td>💚Indonesian NCTzens Aku Bersamamu💚 | Tokopedia WIB: Indonesia K-Pop Awards Behind</td>
+      <td>#NCTDREAM #Tokopedia #WIBKpopAwards #TokopediaWIB #behind\n\nNCT DREAM Official\nhttps://www.you...</td>
+      <td>22</td>
+      <td>:green_heart: Indonesian NCTzens Aku Bersamamu :green_heart:  | Tokopedia WIB: Indonesia K-Pop ...</td>
+    </tr>
+    <tr>
+      <th>3617</th>
+      <td>Astaga..Konro bakar Indonesia bisa menyembuhkan pasien ya..?!🤣</td>
+      <td>#IndonesianFood#KonroBakar#꽁로바까르\nMukbang Konro bakar!!!!!!!!!!!!!!!!!\nBibi kangkung auto seman...</td>
+      <td>24</td>
+      <td>Astaga..Konro bakar Indonesia bisa menyembuhkan pasien ya..?! :rolling_on_the_floor_laughing:</td>
+    </tr>
+  </tbody>
+</table>
+<p>534 rows × 4 columns</p>
+</div></div></div>
+</div>
+<p>Karena kita sudah mendapatkan representasi emoji pada kolom <code class="docutils literal notranslate"><span class="pre">title_emoji</span></code>, kita tidak memerlukan kolom <code class="docutils literal notranslate"><span class="pre">title</span></code> lagi. Sehingga, kita bisa buang kolom tersebut.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Selanjutnya, kita akan melakukan hal yang sama pada kolom <code class="docutils literal notranslate"><span class="pre">description</span></code> untuk kasus emoji.</p>
+<div class="admonition-eksplorasi admonition">
+<p class="admonition-title">Eksplorasi</p>
+<p>Ada berapa video yang deskripsinya menggunakan emoji?</p>
+</div>
+<div class="cell tag_output_scroll docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">desc_with_emoji_idx</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">description</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">em</span> <span class="ow">in</span> <span class="n">list_emoji</span>
+    <span class="k">if</span> <span class="n">em</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">]</span>
+<span class="p">]</span>
+
+<span class="n">data</span><span class="p">[</span><span class="s2">&quot;desc_emoji&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">demojize</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;display.max_colwidth&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">desc_with_emoji_idx</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>description</th>
+      <th>category_id</th>
+      <th>title_emoji</th>
+      <th>desc_emoji</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Rizky Billar - Pemimpinmu | Official Music Video\n\nSurprise Untuk Dede Lesti :\nhttps://youtu.b...</td>
+      <td>10</td>
+      <td>Rizky Billar - Pemimpinmu | Official Music Video</td>
+      <td>Rizky Billar - Pemimpinmu | Official Music Video\n\nSurprise Untuk Dede Lesti :\nhttps://youtu.b...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>#LestiBawaAkuKePenghulu #Lesti #MusicVideo #LiveAcoustic\n\nAura bahagia semakin terpancar denga...</td>
+      <td>10</td>
+      <td>Lesti - Bawa Aku Ke Penghulu | Live Acoustic Version</td>
+      <td>#LestiBawaAkuKePenghulu #Lesti #MusicVideo #LiveAcoustic\n\nAura bahagia semakin terpancar denga...</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Title: Sempurnakan Hariku \nArtist: Rey Mbayang\nComposser: Rey Mbayang, Trakast\nMusic Arranger...</td>
+      <td>10</td>
+      <td>Rey Mbayang - Sempurnakan Hariku (Official Music Video)</td>
+      <td>Title: Sempurnakan Hariku \nArtist: Rey Mbayang\nComposser: Rey Mbayang, Trakast\nMusic Arranger...</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Title: Apa Kabar Mantan\nArtist: Yeni Inka\nSongwriter: Yonanda NDX\n\nFollow juga kita disini y...</td>
+      <td>10</td>
+      <td>Yeni Inka - Apa Kabar Mantan (Official Music Video ANEKA SAFARI) | JOOX ORIGINAL</td>
+      <td>Title: Apa Kabar Mantan\nArtist: Yeni Inka\nSongwriter: Yonanda NDX\n\nFollow juga kita disini y...</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Title: Apa Kabar Mantan\nArtist: Yeni Inka\nSongwriter: Yonanda NDX\n\nFollow juga kita disini y...</td>
+      <td>10</td>
+      <td>Yeni Inka - Apa Kabar Mantan (Official Music Video ANEKA SAFARI) | JOOX ORIGINAL</td>
+      <td>Title: Apa Kabar Mantan\nArtist: Yeni Inka\nSongwriter: Yonanda NDX\n\nFollow juga kita disini y...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>3618</th>
+      <td>Singer :  Yeni Inka\nJudul  :  Lali Janjine\nCipt.    :  S Harsono\nMusik : Lagista\nLabel.  : S...</td>
+      <td>10</td>
+      <td>Lali Janjine - Yeni Inka (Official Music Video)</td>
+      <td>Singer :  Yeni Inka\nJudul  :  Lali Janjine\nCipt.    :  S Harsono\nMusik : Lagista\nLabel.  : S...</td>
+    </tr>
+    <tr>
+      <th>3639</th>
+      <td>⚠ Peringatan untuk penonton ⚠ \n\nAnime ini tidak cocok ditonton oleh anak di bawah 13 tahun. Pe...</td>
+      <td>1</td>
+      <td>Mushoku Tensei: Jobless Reincarnation - Episode 21 [Takarir Indonesia]</td>
+      <td>:warning:  Peringatan untuk penonton  :warning:  \n\nAnime ini tidak cocok ditonton oleh anak d...</td>
+    </tr>
+    <tr>
+      <th>3639</th>
+      <td>⚠ Peringatan untuk penonton ⚠ \n\nAnime ini tidak cocok ditonton oleh anak di bawah 13 tahun. Pe...</td>
+      <td>1</td>
+      <td>Mushoku Tensei: Jobless Reincarnation - Episode 21 [Takarir Indonesia]</td>
+      <td>:warning:  Peringatan untuk penonton  :warning:  \n\nAnime ini tidak cocok ditonton oleh anak d...</td>
+    </tr>
+    <tr>
+      <th>3639</th>
+      <td>⚠ Peringatan untuk penonton ⚠ \n\nAnime ini tidak cocok ditonton oleh anak di bawah 13 tahun. Pe...</td>
+      <td>1</td>
+      <td>Mushoku Tensei: Jobless Reincarnation - Episode 21 [Takarir Indonesia]</td>
+      <td>:warning:  Peringatan untuk penonton  :warning:  \n\nAnime ini tidak cocok ditonton oleh anak d...</td>
+    </tr>
+    <tr>
+      <th>3640</th>
+      <td>▶ Follow aku!\nInstagram - https://www.instagram.com/ekooju/\nOura Store - https://www.instagram...</td>
+      <td>20</td>
+      <td>Gerrard Wijaya Si Publik Paling Kreatif Penemu BUG2 Aneh!! - Rect TikTok #21</td>
+      <td>:play_button:  Follow aku!\nInstagram - https://www.instagram.com/ekooju/\nOura Store - https:/...</td>
+    </tr>
+  </tbody>
+</table>
+<p>1799 rows × 4 columns</p>
+</div></div></div>
+</div>
+<p>Kita juga bisa buang kolom <code class="docutils literal notranslate"><span class="pre">description</span></code> karena kita tidak membutuhkannya lagi.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Selanjutnya, kita akan gabungkan <code class="docutils literal notranslate"><span class="pre">title_emoji</span></code> dan <code class="docutils literal notranslate"><span class="pre">desc_emoji</span></code> menjadi satu teks yang panjang ke dalam kolom <code class="docutils literal notranslate"><span class="pre">all_text</span></code>. Kolom ini yang selanjutnya akan kita gunakan untuk membentuk matriks TF-IDF.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;all_text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;title_emoji&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;desc_emoji&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Untuk membentuk matrik TF-IDF, kita akan gunakan bantuan <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> berdasarkan data <em>training</em>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Kita akan bagi data terlebih dahulu menjadi <em>training</em> dan <em>development</em>.</p>
+</div>
+<div class="cell tag_output_scroll docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># data split</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_dev</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_dev</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;all_text&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">],</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="mf">.2</span><span class="p">,</span>
+    <span class="n">stratify</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">],</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">11</span>
+<span class="p">)</span>
+<span class="n">training_size</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">dev_size</span> <span class="o">=</span> <span class="n">X_dev</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">training_size</span> <span class="si">= }</span><span class="s2">.. </span><span class="si">{</span><span class="n">dev_size</span> <span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># define vectorizer</span>
+<span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span>
+    <span class="n">min_df</span><span class="o">=</span><span class="mf">.015</span><span class="p">,</span>
+    <span class="n">max_df</span><span class="o">=</span><span class="mf">.7</span><span class="p">,</span>
+    <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1"># generate tf-idf matrix</span>
+<span class="n">train_tfidf</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">dev_tfidf</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_dev</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Got train tf-idf with shape:&quot;</span><span class="p">,</span> <span class="n">train_tfidf</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Got dev tf-idf with shape:&quot;</span><span class="p">,</span> <span class="n">dev_tfidf</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># convert to dataframe</span>
+<span class="n">train_tfidf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">train_tfidf</span><span class="o">.</span><span class="n">toarray</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">())</span>
+<span class="n">dev_tfidf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dev_tfidf</span><span class="o">.</span><span class="n">toarray</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>training_size = 2921.. dev_size = 731
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Got train tf-idf with shape: (2921, 958)
+Got dev tf-idf with shape: (731, 958)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;display.max_columns&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">train_tfidf</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>00</th>
+      <th>000</th>
+      <th>01</th>
+      <th>02</th>
+      <th>03</th>
+      <th>04</th>
+      <th>06</th>
+      <th>07</th>
+      <th>08</th>
+      <th>09</th>
+      <th>10</th>
+      <th>100</th>
+      <th>11</th>
+      <th>12</th>
+      <th>123</th>
+      <th>13</th>
+      <th>14</th>
+      <th>15</th>
+      <th>16</th>
+      <th>17</th>
+      <th>18</th>
+      <th>19</th>
+      <th>1dvz1au</th>
+      <th>1gxqz9s</th>
+      <th>1st</th>
+      <th>20</th>
+      <th>2020</th>
+      <th>2021</th>
+      <th>21</th>
+      <th>22</th>
+      <th>23</th>
+      <th>24</th>
+      <th>26</th>
+      <th>28</th>
+      <th>2oukyag</th>
+      <th>2yfofxp</th>
+      <th>30</th>
+      <th>31</th>
+      <th>3ws0f48</th>
+      <th>40</th>
+      <th>45</th>
+      <th>50</th>
+      <th>62</th>
+      <th>about</th>
+      <th>acara</th>
+      <th>account</th>
+      <th>ada</th>
+      <th>adalah</th>
+      <th>adanya</th>
+      <th>admin</th>
+      <th>...</th>
+      <th>up</th>
+      <th>update</th>
+      <th>upload</th>
+      <th>us</th>
+      <th>user</th>
+      <th>utama</th>
+      <th>utm_medium</th>
+      <th>vanessa</th>
+      <th>via</th>
+      <th>video</th>
+      <th>videonya</th>
+      <th>videos</th>
+      <th>vidio</th>
+      <th>viral</th>
+      <th>vita</th>
+      <th>voc</th>
+      <th>vocal</th>
+      <th>vs</th>
+      <th>vt</th>
+      <th>wa</th>
+      <th>waktu</th>
+      <th>wanita</th>
+      <th>warga</th>
+      <th>warna</th>
+      <th>watch</th>
+      <th>watching</th>
+      <th>web</th>
+      <th>website</th>
+      <th>wes</th>
+      <th>whatsapp</th>
+      <th>wib</th>
+      <th>with</th>
+      <th>withyoutube</th>
+      <th>wong</th>
+      <th>www</th>
+      <th>ya</th>
+      <th>yaa</th>
+      <th>yah</th>
+      <th>yaitu</th>
+      <th>yakin</th>
+      <th>yang</th>
+      <th>yen</th>
+      <th>yeni</th>
+      <th>yeniinka</th>
+      <th>yg</th>
+      <th>you</th>
+      <th>your</th>
+      <th>youtu</th>
+      <th>youtube</th>
+      <th>yuk</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2285</th>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.038006</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.063318</td>
+      <td>0.14526</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.128947</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.045184</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.123574</td>
+      <td>0.091496</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.099413</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.065366</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.059746</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>391</th>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.021872</td>
+      <td>0.022238</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.017935</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.025805</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.046252</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.072203</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.00000</td>
+      <td>0.024207</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.020552</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.159262</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.019294</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.026453</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>105</th>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.498869</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.071046</td>
+      <td>0.00000</td>
+      <td>0.092019</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.217029</td>
+      <td>0.092959</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.086487</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.110926</td>
+      <td>0.051332</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.027887</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.073344</td>
+      <td>0.0</td>
+      <td>0.055924</td>
+      <td>0.134076</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2050</th>
+      <td>0.086611</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.191518</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.092492</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.107424</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.00000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.068780</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.081287</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.340490</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.136420</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2044</th>
+      <td>0.133694</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.192701</td>
+      <td>0.0</td>
+      <td>0.097335</td>
+      <td>0.0</td>
+      <td>0.089173</td>
+      <td>0.174118</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.074012</td>
+      <td>0.083406</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.088515</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.071387</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.051552</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.00000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.053085</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.087111</td>
+      <td>0.000000</td>
+      <td>0.081347</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.058399</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.175485</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 958 columns</p>
+</div></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="modeling">
+<h2>Modeling<a class="headerlink" href="#modeling" title="Permalink to this headline">¶</a></h2>
+<p>Setelah mempersiapkan data untuk <em>training</em>, sekarang saatnya kita lakukan <em>training</em> menggunakan beberapa model. Model yang akan kita coba untuk mengklasifikasi kategori video YouTube seperti:</p>
+<ul class="simple">
+<li><p>Logistic Regression</p></li>
+<li><p>Naive Bayes</p></li>
+<li><p>SVM</p></li>
+<li><p>Decision Tree</p></li>
+<li><p>Random Forest</p></li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Penjelasan tentang bagaimana model bekerja secara detail mungkin tidak akan di bahas di sini. Jika tertarik, silakan membaca literatur yang tersedia secara online.</p>
+</div>
+<div class="section" id="model-training-evaluation">
+<h3>Model Training &amp; Evaluation<a class="headerlink" href="#model-training-evaluation" title="Permalink to this headline">¶</a></h3>
+<p>Pertama, mari kita definisikan beberapa model tersebut dan menggunakan <em>default hyperparameter</em> dari <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> terlebih dahulu.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dict_models</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;logistic_regression&quot;</span><span class="p">:</span> <span class="n">LogisticRegression</span><span class="p">(),</span>
+    <span class="s2">&quot;naive_bayes&quot;</span><span class="p">:</span> <span class="n">MultinomialNB</span><span class="p">(),</span>
+    <span class="s2">&quot;svm&quot;</span><span class="p">:</span> <span class="n">LinearSVC</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">11</span><span class="p">),</span>
+    <span class="s2">&quot;decision_tree&quot;</span><span class="p">:</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">11</span><span class="p">),</span>
+    <span class="s2">&quot;random_forest&quot;</span><span class="p">:</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_output_scroll docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">dict_models</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-- </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> --&quot;</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_tfidf</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">dev_tfidf</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reports on dev set:&quot;</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">y_dev</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-- LogisticRegression --
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reports on dev set:
+              precision    recall  f1-score   support
+
+           1       0.91      0.50      0.65        20
+           2       1.00      0.70      0.82        20
+          10       0.92      0.92      0.92       141
+          15       1.00      0.14      0.25         7
+          17       1.00      0.31      0.47        13
+          19       0.00      0.00      0.00         5
+          20       0.85      0.87      0.86        54
+          22       0.66      0.59      0.62        70
+          23       0.93      0.84      0.89        32
+          24       0.72      0.88      0.79       229
+          25       0.81      0.96      0.88        99
+          26       0.80      0.25      0.38        16
+          27       1.00      0.12      0.22         8
+          28       1.00      0.57      0.73         7
+          29       1.00      0.80      0.89        10
+
+    accuracy                           0.80       731
+   macro avg       0.84      0.56      0.62       731
+weighted avg       0.81      0.80      0.79       731
+
+-- MultinomialNB --
+Reports on dev set:
+              precision    recall  f1-score   support
+
+           1       1.00      0.25      0.40        20
+           2       1.00      0.25      0.40        20
+          10       0.88      0.89      0.88       141
+          15       0.00      0.00      0.00         7
+          17       1.00      0.31      0.47        13
+          19       0.00      0.00      0.00         5
+          20       0.85      0.83      0.84        54
+          22       0.65      0.43      0.52        70
+          23       1.00      0.28      0.44        32
+          24       0.60      0.81      0.69       229
+          25       0.71      0.96      0.82        99
+          26       0.47      0.50      0.48        16
+          27       0.00      0.00      0.00         8
+          28       0.00      0.00      0.00         7
+          29       1.00      0.80      0.89        10
+
+    accuracy                           0.71       731
+   macro avg       0.61      0.42      0.46       731
+weighted avg       0.72      0.71      0.68       731
+
+-- LinearSVC --
+Reports on dev set:
+              precision    recall  f1-score   support
+
+           1       0.76      0.65      0.70        20
+           2       1.00      0.80      0.89        20
+          10       0.94      0.94      0.94       141
+          15       1.00      0.57      0.73         7
+          17       0.75      0.46      0.57        13
+          19       1.00      0.80      0.89         5
+          20       0.85      0.93      0.88        54
+          22       0.76      0.79      0.77        70
+          23       0.91      0.91      0.91        32
+          24       0.87      0.87      0.87       229
+          25       0.82      0.96      0.88        99
+          26       0.79      0.69      0.73        16
+          27       0.86      0.75      0.80         8
+          28       1.00      0.71      0.83         7
+          29       1.00      0.80      0.89        10
+
+    accuracy                           0.87       731
+   macro avg       0.89      0.77      0.82       731
+weighted avg       0.87      0.87      0.86       731
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-- DecisionTreeClassifier --
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reports on dev set:
+              precision    recall  f1-score   support
+
+           1       0.75      0.75      0.75        20
+           2       0.81      0.85      0.83        20
+          10       0.89      0.86      0.87       141
+          15       1.00      0.57      0.73         7
+          17       0.42      0.38      0.40        13
+          19       0.60      0.60      0.60         5
+          20       0.87      0.83      0.85        54
+          22       0.59      0.63      0.61        70
+          23       0.71      0.91      0.79        32
+          24       0.79      0.81      0.80       229
+          25       0.83      0.84      0.83        99
+          26       0.53      0.50      0.52        16
+          27       0.33      0.25      0.29         8
+          28       1.00      0.43      0.60         7
+          29       1.00      0.80      0.89        10
+
+    accuracy                           0.78       731
+   macro avg       0.74      0.67      0.69       731
+weighted avg       0.79      0.78      0.78       731
+
+-- RandomForestClassifier --
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reports on dev set:
+              precision    recall  f1-score   support
+
+           1       1.00      0.60      0.75        20
+           2       1.00      0.95      0.97        20
+          10       0.93      0.95      0.94       141
+          15       1.00      0.57      0.73         7
+          17       0.86      0.46      0.60        13
+          19       1.00      0.80      0.89         5
+          20       0.91      0.91      0.91        54
+          22       0.90      0.77      0.83        70
+          23       1.00      0.94      0.97        32
+          24       0.82      0.90      0.86       229
+          25       0.86      1.00      0.93        99
+          26       0.83      0.62      0.71        16
+          27       1.00      0.75      0.86         8
+          28       1.00      0.71      0.83         7
+          29       1.00      0.80      0.89        10
+
+    accuracy                           0.88       731
+   macro avg       0.94      0.78      0.84       731
+weighted avg       0.89      0.88      0.88       731
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="hyperparameter-tuning">
+<h3>Hyperparameter Tuning<a class="headerlink" href="#hyperparameter-tuning" title="Permalink to this headline">¶</a></h3>
+<p>Dari 5 model tersebut, 2 model yang paling bagus akurasinya adalah <code class="docutils literal notranslate"><span class="pre">LinearSVC</span></code> dan <code class="docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code>. Oleh karena itu, kita akan coba melakukan <em>hyperparameter tuning</em> untuk kedua model tersebut, dengan harapan performa model akan semakin bagus. Kita akan menggunakan <em>grid search</em> untuk menentukan <em>hyperparameter</em> yang paling optimal.</p>
+<div class="section" id="linearsvc">
+<h4><code class="docutils literal notranslate"><span class="pre">LinearSVC</span></code><a class="headerlink" href="#linearsvc" title="Permalink to this headline">¶</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">svm_grid_search</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span>
+    <span class="n">dict_models</span><span class="p">[</span><span class="s2">&quot;svm&quot;</span><span class="p">],</span>
+    <span class="p">{</span><span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">.1</span><span class="p">,</span> <span class="mf">.05</span><span class="p">,</span> <span class="mf">.01</span><span class="p">)},</span>
+<span class="p">)</span>
+
+<span class="n">svm_grid_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_tfidf</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">svm_pred_dev</span> <span class="o">=</span> <span class="n">svm_grid_search</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">dev_tfidf</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reports on train set:&quot;</span><span class="p">,</span>
+      <span class="n">classification_report</span><span class="p">(</span>
+          <span class="n">y_train</span><span class="p">,</span>
+          <span class="n">svm_grid_search</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_tfidf</span><span class="p">)</span>
+      <span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reports on dev set:&quot;</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">y_dev</span><span class="p">,</span> <span class="n">svm_pred_dev</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reports on train set:
+              precision    recall  f1-score   support
+
+           1       0.99      0.94      0.96        80
+           2       1.00      1.00      1.00        80
+          10       0.97      0.99      0.98       562
+          15       1.00      1.00      1.00        26
+          17       0.96      1.00      0.98        53
+          19       1.00      1.00      1.00        19
+          20       0.98      0.98      0.98       217
+          22       0.96      0.89      0.93       278
+          23       0.98      0.98      0.98       128
+          24       0.96      0.95      0.96       915
+          25       0.95      0.99      0.97       394
+          26       0.91      0.95      0.93        65
+          27       1.00      0.97      0.99        34
+          28       1.00      1.00      1.00        28
+          29       1.00      0.98      0.99        42
+
+    accuracy                           0.97      2921
+   macro avg       0.98      0.98      0.98      2921
+weighted avg       0.97      0.97      0.97      2921
+
+Reports on dev set:
+              precision    recall  f1-score   support
+
+           1       0.76      0.65      0.70        20
+           2       1.00      0.80      0.89        20
+          10       0.94      0.94      0.94       141
+          15       1.00      0.57      0.73         7
+          17       0.75      0.46      0.57        13
+          19       1.00      0.80      0.89         5
+          20       0.85      0.93      0.88        54
+          22       0.76      0.79      0.77        70
+          23       0.91      0.91      0.91        32
+          24       0.87      0.87      0.87       229
+          25       0.82      0.96      0.88        99
+          26       0.79      0.69      0.73        16
+          27       0.86      0.75      0.80         8
+          28       1.00      0.71      0.83         7
+          29       1.00      0.80      0.89        10
+
+    accuracy                           0.87       731
+   macro avg       0.89      0.77      0.82       731
+weighted avg       0.87      0.87      0.86       731
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">svm_grid_search</span><span class="o">.</span><span class="n">best_params_</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;C&#39;: 1}
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="randomforestclassifier">
+<h4><code class="docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code><a class="headerlink" href="#randomforestclassifier" title="Permalink to this headline">¶</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">random_forest_grid_search</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span>
+    <span class="n">dict_models</span><span class="p">[</span><span class="s2">&quot;random_forest&quot;</span><span class="p">],</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;n_estimators&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">125</span><span class="p">),</span>
+        <span class="s2">&quot;max_depth&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">random_forest_grid_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_tfidf</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">random_forest_pred</span> <span class="o">=</span> <span class="n">random_forest_grid_search</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">dev_tfidf</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reports on train set:&quot;</span><span class="p">,</span>
+      <span class="n">classification_report</span><span class="p">(</span>
+          <span class="n">y_train</span><span class="p">,</span>
+          <span class="n">random_forest_grid_search</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_tfidf</span><span class="p">)</span>
+      <span class="p">),</span>
+      <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reports on dev set:&quot;</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">y_dev</span><span class="p">,</span> <span class="n">random_forest_pred</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reports on train set:
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00        80
+           2       1.00      0.96      0.98        80
+          10       1.00      1.00      1.00       562
+          15       1.00      1.00      1.00        26
+          17       0.98      0.98      0.98        53
+          19       1.00      0.89      0.94        19
+          20       1.00      1.00      1.00       217
+          22       1.00      0.98      0.99       278
+          23       1.00      0.98      0.99       128
+          24       0.98      1.00      0.99       915
+          25       1.00      1.00      1.00       394
+          26       1.00      0.98      0.99        65
+          27       1.00      1.00      1.00        34
+          28       1.00      1.00      1.00        28
+          29       1.00      1.00      1.00        42
+
+    accuracy                           0.99      2921
+   macro avg       1.00      0.98      0.99      2921
+weighted avg       0.99      0.99      0.99      2921
+
+Reports on dev set:
+              precision    recall  f1-score   support
+
+           1       1.00      0.60      0.75        20
+           2       1.00      0.90      0.95        20
+          10       0.95      0.95      0.95       141
+          15       1.00      0.57      0.73         7
+          17       0.86      0.46      0.60        13
+          19       1.00      0.80      0.89         5
+          20       0.91      0.89      0.90        54
+          22       0.92      0.70      0.80        70
+          23       1.00      0.94      0.97        32
+          24       0.80      0.91      0.85       229
+          25       0.85      1.00      0.92        99
+          26       0.77      0.62      0.69        16
+          27       1.00      0.75      0.86         8
+          28       1.00      0.71      0.83         7
+          29       1.00      0.80      0.89        10
+
+    accuracy                           0.88       731
+   macro avg       0.94      0.77      0.84       731
+weighted avg       0.89      0.88      0.87       731
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">random_forest_grid_search</span><span class="o">.</span><span class="n">best_params_</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;max_depth&#39;: 50, &#39;n_estimators&#39;: 125}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Dari sini, dapat disimpulkan bahwa model <strong>Random Forest</strong>, meskipun kedua model tersebut <em>overfit</em>, memiliki performa yang paling bagus pada data <em>development</em>. Sehingga, kita akan gunakan model tersebut untuk memprediksi kategori video lainnya.</p>
+</div>
+</div>
+<div class="section" id="save-model">
+<h3>Save Model<a class="headerlink" href="#save-model" title="Permalink to this headline">¶</a></h3>
+<p>Untuk keperluan prediksi, kita harus menyimpan model yang sudah kita latih sehingga dapat digunakan oleh pengguna, baik itu melalui <em>deployment</em> atau riset. Kita bisa gunakan <code class="docutils literal notranslate"><span class="pre">joblib</span></code> untuk menyimpan model <em>random forest</em> yang sudah kita latih tadi.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">random_forest_grid_search</span><span class="o">.</span><span class="n">best_estimator_</span><span class="p">,</span> <span class="s2">&quot;model/model.joblib&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;model/model.joblib&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Untuk mengecek apakah model benar-benar sudah tersimpan, kita akan <em>load</em> modelnya dan gunakan untuk memprediksi data <em>development</em> yang harusnya memiliki laporan klasifikasi yang sama pada laporan sebelumnya.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;model/model.joblib&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">get_params</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;bootstrap&#39;: True, &#39;ccp_alpha&#39;: 0.0, &#39;class_weight&#39;: None, &#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 50, &#39;max_features&#39;: &#39;auto&#39;, &#39;max_leaf_nodes&#39;: None, &#39;max_samples&#39;: None, &#39;min_impurity_decrease&#39;: 0.0, &#39;min_samples_leaf&#39;: 1, &#39;min_samples_split&#39;: 2, &#39;min_weight_fraction_leaf&#39;: 0.0, &#39;n_estimators&#39;: 125, &#39;n_jobs&#39;: None, &#39;oob_score&#39;: False, &#39;random_state&#39;: 11, &#39;verbose&#39;: 0, &#39;warm_start&#39;: False}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">dev_tfidf</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_dev</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>              precision    recall  f1-score   support
+
+           1       1.00      0.60      0.75        20
+           2       1.00      0.90      0.95        20
+          10       0.95      0.95      0.95       141
+          15       1.00      0.57      0.73         7
+          17       0.86      0.46      0.60        13
+          19       1.00      0.80      0.89         5
+          20       0.91      0.89      0.90        54
+          22       0.92      0.70      0.80        70
+          23       1.00      0.94      0.97        32
+          24       0.80      0.91      0.85       229
+          25       0.85      1.00      0.92        99
+          26       0.77      0.62      0.69        16
+          27       1.00      0.75      0.86         8
+          28       1.00      0.71      0.83         7
+          29       1.00      0.80      0.89        10
+
+    accuracy                           0.88       731
+   macro avg       0.94      0.77      0.84       731
+weighted avg       0.89      0.88      0.87       731
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -259,11 +3565,11 @@
         
             <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="eda.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="machine-learning-overview.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Exploratory Data Analysis on YouTube Trending Video Statistics</p>
+            <p class="prev-next-title">Machine Learning: An Overview</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="references.html" title="next page">
