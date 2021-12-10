@@ -8,6 +8,11 @@ parse:
   myst_enable_extension:
     - deflist
 
+execute:
+  exclude_patterns:
+    - 'modelling'
+  timeout: 300
+
 # references
 bibtex_bibfiles:
   - references.bib
