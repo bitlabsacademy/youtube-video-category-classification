@@ -40,24 +40,21 @@ def get_model(model_path: str):
     return model
 
 
-def main():
-    model = get_model(c.MODEL_PATH)
-    logo = Image.open(c.LOGO_PATH)
-    dict_category = get_category_dict(c.CATEGORY_PATH)
+model = get_model(c.MODEL_PATH)
+logo = Image.open(c.LOGO_PATH)
+dict_category = get_category_dict(c.CATEGORY_PATH)
 
-    st.title("YouTube Video Category Classification")
-    st.subheader("based on Title and Description")
-    st.image(logo)
+st.title("YouTube Video Category Classification")
+st.subheader("based on Title and Description")
+st.image(logo)
 
-    text = st.text_area("Put your title and/or description here:")
-    text = demojize(text)
+text = st.text_area("Put your title and/or description here:")
+text = demojize(text)
 
-    run_model = st.button("Classify")
-    if run_model:
-        prediction = model.predict([text])
-        category = dict_category.get(str(prediction[0]))
-        st.write("Video category:", category)
+run_model = st.button("Classify")
+if run_model:
+    prediction = model.predict([text])
+    category = dict_category.get(str(prediction[0]))
+    st.write("Video category:", category)
 
 
-if __name__ == "__main__":
-    main()
