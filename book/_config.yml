@@ -9,9 +9,8 @@ parse:
     - deflist
 
 execute:
-  exclude_patterns:
-    - 'modelling'
-  timeout: 300
+  exclude_patterns: ["modelling"]
+  timeout: 420
 
 # references
 bibtex_bibfiles:
@@ -21,3 +20,13 @@ bibtex_bibfiles:
 sphinx:
   config:
     bibtex_reference_style: author_year
+
+# launch button config
+launch_buttons:
+  notebook_interface: "jupyterlab"
+  colab_url: "https://colab.research.google.com"
+
+repository:
+  url: "https://github.com/bitlabsacademy/youtube-video-category-classification"
+  path_to_book: "book"
+  branch: "main"
