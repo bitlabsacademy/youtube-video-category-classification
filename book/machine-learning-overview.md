@@ -11,7 +11,8 @@ Pada notebook ini, kita akan meninjau ulang dasar *machine learning*. Secara gar
 Pertama, coba isi mentimeter berikut. Menurut kamu, kira-kira apa yang dimaksud dengan machine learning?
 
 ```{image} assets/images/menti-ml.png
-:width: 60%
+:width: 50%
+:align: center
 ```
 
 Untuk mendefinisikan *machine learning*, terlebih dahulu kita perlu tahu apa yang dimaksud dengan *learning* di sini.
