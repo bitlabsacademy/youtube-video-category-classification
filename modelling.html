@@ -42,8 +42,6 @@
     <script src="_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -358,6 +356,7 @@
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">ConfusionMatrixDisplay</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">GridSearchCV</span>
 <span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="kn">import</span> <span class="n">MultinomialNB</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
 <span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">LinearSVC</span>
 <span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
 
@@ -390,6 +389,20 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Karena alasan teknis, kita hanya akan menggunakan data video trending dari bulan Juli sampai Desember saja.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_category_dict</span><span class="p">(</span><span class="n">category_file</span><span class="p">):</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">category_file</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">category</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="n">cat</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="n">cat</span><span class="o">.</span><span class="n">snippet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">category</span><span class="o">.</span><span class="n">itertuples</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -654,7 +667,7 @@ end_date = Timestamp(&#39;2021-12-06 06:01:25.828896+0000&#39;, tz=&#39;UTC&#39;
 </div>
 </div>
 </div>
-<p>Terdapat <span class="math notranslate nohighlight">\(31.600\)</span> video yang masuk daftar trending setiap harinya dari bulan Juli sampai Desember. Selanjutnya, kita akan lakukan eksplorasi data terlebih dahulu sebelum mulai membuat model <em>machine learning</em>.</p>
+<p>Terdapat $31.600$ video yang masuk daftar trending setiap harinya dari bulan Juli sampai Desember. Selanjutnya, kita akan lakukan eksplorasi data terlebih dahulu sebelum mulai membuat model <em>machine learning</em>.</p>
 <p>Selanjutnya, mari kita lihat bagaimana distribusi <em>missing value</em> pada masing-masing kolom.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -848,7 +861,7 @@ memory usage: 6.1+ MB
 </table>
 </div></div></div>
 </div>
-<div class="cell tag_hide-input docutils container">
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
@@ -875,7 +888,7 @@ memory usage: 6.1+ MB
 <div class="section" id="most-viewed-liked-and-disliked-video">
 <h3>Most Viewed, Liked, and Disliked Video<a class="headerlink" href="#most-viewed-liked-and-disliked-video" title="Permalink to this headline">¶</a></h3>
 <p>Metrik ini tentu sangat umum dan dijunjung tinggi oleh para kreator konten YouTube. Dengan metrik tersebut, kita juga bisa membuat <em>YouTube Rewind 2021</em> versi sederhana kita sendiri.</p>
-<div class="cell tag_output_scroll docutils container">
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trending_by_title</span> <span class="o">=</span> <span class="n">filtered_trending</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
 <span class="n">trending_rewind</span> <span class="o">=</span> <span class="n">trending_by_title</span><span class="p">[[</span><span class="s2">&quot;view&quot;</span><span class="p">,</span> <span class="s2">&quot;like&quot;</span><span class="p">,</span> <span class="s2">&quot;dislike&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">])</span>
@@ -1114,7 +1127,7 @@ memory usage: 6.1+ MB
 </div>
 <p>Jika kita lihat data di atas, ada beberapa video yang jumlah minimal dan maksimum <code class="docutils literal notranslate"><span class="pre">view</span></code>, <code class="docutils literal notranslate"><span class="pre">like</span></code>, maupun <code class="docutils literal notranslate"><span class="pre">dislike</span></code> yang berbeda. Ini bisa saja dikarenakan video tersebut yang bertahan beberapa hari dalam trending, seperti video <code class="docutils literal notranslate"><span class="pre">&quot;Emosi</span> <span class="pre">Rico</span> <span class="pre">Simanjutak&quot;</span> <span class="pre">Saat</span> <span class="pre">...</span></code> yang dimulai dengan jumlah <code class="docutils literal notranslate"><span class="pre">view</span></code> 72.434 pada awal masuk trending dan pada hari terakhir dalam trending mencapai jumlah <code class="docutils literal notranslate"><span class="pre">view</span></code> 116.310.</p>
 <p>Sekarang, mari kita lihat jumlah maksimal <code class="docutils literal notranslate"><span class="pre">view</span></code>, <code class="docutils literal notranslate"><span class="pre">like</span></code>, dan <code class="docutils literal notranslate"><span class="pre">dislike</span></code> dari video teratas masing-masing tersebut dan bandingkan dengan pada saat awal masuk trending.</p>
-<div class="cell tag_hide-input docutils container">
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">top_10_liked</span> <span class="o">=</span> <span class="n">trending_rewind</span><span class="p">[</span><span class="s2">&quot;like&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
 
@@ -1142,7 +1155,7 @@ memory usage: 6.1+ MB
 <img alt="_images/modelling_23_0.png" src="_images/modelling_23_0.png" />
 </div>
 </div>
-<div class="cell tag_hide-input docutils container">
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">top_10_viewed</span> <span class="o">=</span> <span class="n">trending_rewind</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
 
@@ -1170,7 +1183,7 @@ memory usage: 6.1+ MB
 <img alt="_images/modelling_24_0.png" src="_images/modelling_24_0.png" />
 </div>
 </div>
-<div class="cell tag_hide-input docutils container">
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">top_10_disliked</span> <span class="o">=</span> <span class="n">trending_rewind</span><span class="p">[</span><span class="s2">&quot;dislike&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
 
@@ -1232,7 +1245,7 @@ memory usage: 6.1+ MB
 </div>
 </div>
 <p>Sebagai contoh, perhatikan sampel judul dan deskripsi video berikut.</p>
-<div class="cell tag_output_scroll docutils container">
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample</span> <span class="o">=</span> <span class="n">filtered_trending</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
 <span class="n">sample</span><span class="p">[[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">]]</span>
@@ -1325,7 +1338,7 @@ memory usage: 6.1+ MB
 </div>
 </div>
 </div>
-<div class="cell tag_output_scroll docutils container">
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;display.max_colwidth&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">):</span>
     <span class="n">display</span><span class="p">(</span><span class="n">sample</span><span class="p">[[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;title_lang&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;desc_lang&quot;</span><span class="p">]])</span>
@@ -1455,13 +1468,26 @@ memory usage: 6.1+ MB
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">detect_language</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Detect language of the `text`.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">lang</span> <span class="o">=</span> <span class="n">langdetect</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lang</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filtered_trending</span><span class="p">[</span><span class="s2">&quot;title_lang&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtered_trending</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">detect_language</span><span class="p">)</span>
 <span class="n">filtered_trending</span><span class="p">[</span><span class="s2">&quot;desc_lang&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtered_trending</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">detect_language</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<div class="cell tag_output_scroll docutils container">
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filtered_trending</span><span class="p">[[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;title_lang&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;desc_lang&quot;</span><span class="p">]]</span>
 </pre></div>
@@ -1517,7 +1543,7 @@ memory usage: 6.1+ MB
     <tr>
       <th>21325</th>
       <td>Rizky Billar - Pemimpinmu | Official Music Video</td>
-      <td>it</td>
+      <td>en</td>
       <td>Rizky Billar - Pemimpinmu | Official Music Vid...</td>
       <td>id</td>
     </tr>
@@ -1576,7 +1602,7 @@ memory usage: 6.1+ MB
 </div></div></div>
 </div>
 <p>Setelah kita selesai mendeteksi bahasa pada <code class="docutils literal notranslate"><span class="pre">title</span></code> dan <code class="docutils literal notranslate"><span class="pre">description</span></code>, langkah selanjutnya adalah membuang data yang <code class="docutils literal notranslate"><span class="pre">title</span></code> atau <code class="docutils literal notranslate"><span class="pre">description</span></code> bukan <code class="docutils literal notranslate"><span class="pre">id</span></code>, yaitu tidak berbahasa Indonesia.</p>
-<div class="cell tag_output_scroll docutils container">
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">indo_trending</span> <span class="o">=</span> <span class="n">filtered_trending</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
     <span class="p">(</span><span class="n">filtered_trending</span><span class="o">.</span><span class="n">title_lang</span> <span class="o">==</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">filtered_trending</span><span class="o">.</span><span class="n">desc_lang</span> <span class="o">==</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span>
@@ -1638,312 +1664,312 @@ memory usage: 6.1+ MB
   </thead>
   <tbody>
     <tr>
-      <th>48875</th>
-      <td>2021-11-05 04:30:02+00:00</td>
-      <td>UCuMAjEaSMj7q7YLf0xW1MjQ</td>
-      <td>Momen Haru Ayah Vanessa Angel Kecup Peti Usai ...</td>
-      <td>Tonton video lengkapnya disini: http://detik.i...</td>
+      <th>23234</th>
+      <td>2021-07-09 12:19:13+00:00</td>
+      <td>UC7Zgj5p9QOuz65oDU51Jlng</td>
+      <td>Petugas PPKM Darurat Amankan Gadis Open BO</td>
+      <td>PPKM Darurat masih diberlakukan hingga 20 juli...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>detikcom</td>
-      <td>['detikcom', '20detik', 'Momen', 'Haru', 'Ayah...</td>
+      <td>Rana Films</td>
+      <td>NaN</td>
+      <td>22</td>
+      <td>none</td>
+      <td>Petugas PPKM Darurat Amankan Gadis Open BO</td>
+      <td>PPKM Darurat masih diberlakukan hingga 20 juli...</td>
+      <td>PT25M17S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>74272.0</td>
+      <td>1988.0</td>
+      <td>44.0</td>
+      <td>0</td>
+      <td>521.0</td>
+      <td>2021-07-10 06:01:04.441236+00:00</td>
+      <td>id</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>37537</th>
+      <td>2021-09-14 09:00:05+00:00</td>
+      <td>UCXdmo_q4SawYMz-dmeKEHPQ</td>
+      <td>EVOS RASYAH SIAP NGALAHIN PROPLAYER!! SIAPA YA...</td>
+      <td>SUBSCRIBE DAN NYALAIN LONCENGNYA! : https://ww...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Dyland PROS</td>
+      <td>['Dyland PROS', 'Dyland PROS Gaming', 'dyland ...</td>
       <td>24</td>
       <td>none</td>
-      <td>Momen Haru Ayah Vanessa Angel Kecup Peti Usai ...</td>
-      <td>Tonton video lengkapnya disini: http://detik.i...</td>
-      <td>PT1M46S</td>
+      <td>EVOS RASYAH SIAP NGALAHIN PROPLAYER!! SIAPA YA...</td>
+      <td>SUBSCRIBE DAN NYALAIN LONCENGNYA! : https://ww...</td>
+      <td>PT20M49S</td>
       <td>2d</td>
       <td>hd</td>
       <td>False</td>
       <td>True</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>750100.0</td>
-      <td>3921.0</td>
-      <td>201.0</td>
+      <td>2356774.0</td>
+      <td>134147.0</td>
+      <td>3687.0</td>
       <td>0</td>
-      <td>438.0</td>
-      <td>2021-11-15 06:02:48.689656+00:00</td>
-      <td>id</td>
+      <td>2887.0</td>
+      <td>2021-09-20 06:00:52.962210+00:00</td>
+      <td>de</td>
       <td>id</td>
     </tr>
     <tr>
-      <th>27523</th>
-      <td>2021-07-27 14:00:14+00:00</td>
-      <td>UC7FE8E7nCP-sJO8o4FTo93Q</td>
-      <td>DENNY CAKNAN FT. NDARBOY GENK - MENDUNG TANPO ...</td>
-      <td>DENNY CAKNAN FT. NDARBOY GENK - MENDUNG TANPO ...</td>
+      <th>31278</th>
+      <td>2021-08-17 08:55:23+00:00</td>
+      <td>UCE6zDe5DgDoic9xQYDqLNGQ</td>
+      <td>KRETEK ABAL2 TUKANG - SAKIT BERTAHUN2 LANGSUNG...</td>
+      <td>HELLO GUYS, IT IS A BEAUTIFUL DAY... Untuk mel...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>DC. PRODUCTION</td>
-      <td>['dc musik', 'DENNY CAKNAN', 'NDARBOY GENK', '...</td>
-      <td>10</td>
-      <td>none</td>
-      <td>DENNY CAKNAN FT. NDARBOY GENK - MENDUNG TANPO ...</td>
-      <td>DENNY CAKNAN FT. NDARBOY GENK - MENDUNG TANPO ...</td>
-      <td>PT5M1S</td>
-      <td>2d</td>
-      <td>hd</td>
-      <td>True</td>
-      <td>True</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>3504271.0</td>
-      <td>129698.0</td>
-      <td>2156.0</td>
-      <td>0</td>
-      <td>15208.0</td>
-      <td>2021-08-01 06:00:51.095946+00:00</td>
-      <td>en</td>
-      <td>id</td>
-    </tr>
-    <tr>
-      <th>21989</th>
-      <td>2021-06-22 05:00:14+00:00</td>
-      <td>UCqXWjpE38rpAvb6lPUdDmEQ</td>
-      <td>Rey Mbayang - Sempurnakan Hariku (Official Mus...</td>
-      <td>Title: Sempurnakan Hariku \nArtist: Rey Mbayan...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Falcon Music Indonesia</td>
-      <td>['Falcon', 'Music']</td>
-      <td>10</td>
-      <td>none</td>
-      <td>Rey Mbayang - Sempurnakan Hariku (Official Mus...</td>
-      <td>Title: Sempurnakan Hariku \nArtist: Rey Mbayan...</td>
-      <td>PT4M51S</td>
-      <td>2d</td>
-      <td>hd</td>
-      <td>False</td>
-      <td>True</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>4686936.0</td>
-      <td>402052.0</td>
-      <td>4699.0</td>
-      <td>0</td>
-      <td>54360.0</td>
-      <td>2021-07-04 06:00:53.053255+00:00</td>
-      <td>id</td>
-      <td>id</td>
-    </tr>
-    <tr>
-      <th>37182</th>
-      <td>2021-09-13 09:25:05+00:00</td>
-      <td>UC0zTYTRQe77tnOIS03HaNeg</td>
-      <td>Tretan Muslim Pilih Jualan Bakso Daripada Seko...</td>
-      <td>#Part01 #TretanMuslim #DanielTetanggaKamu\n\nH...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Daniel Mananta Network</td>
-      <td>['daniel', 'mananta', 'fremantle', 'media', 'i...</td>
+      <td>BEEMZ ARYO</td>
+      <td>['kretek', 'abal', 'abal2', 'bimaaryo', 'beemz...</td>
       <td>24</td>
       <td>none</td>
-      <td>Tretan Muslim Pilih Jualan Bakso Daripada Seko...</td>
-      <td>#Part01 #TretanMuslim #DanielTetanggaKamu\n\nH...</td>
-      <td>PT22M20S</td>
+      <td>KRETEK ABAL2 TUKANG - SAKIT BERTAHUN2 LANGSUNG...</td>
+      <td>HELLO GUYS, IT IS A BEAUTIFUL DAY... Untuk mel...</td>
+      <td>PT34M47S</td>
       <td>2d</td>
       <td>hd</td>
       <td>False</td>
       <td>True</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>483206.0</td>
-      <td>19087.0</td>
-      <td>218.0</td>
+      <td>498787.0</td>
+      <td>17560.0</td>
+      <td>188.0</td>
       <td>0</td>
-      <td>924.0</td>
-      <td>2021-09-18 06:01:04.090491+00:00</td>
-      <td>id</td>
+      <td>3604.0</td>
+      <td>2021-08-19 06:01:22.395936+00:00</td>
+      <td>de</td>
       <td>id</td>
     </tr>
     <tr>
-      <th>42192</th>
-      <td>2021-10-10 02:00:01+00:00</td>
-      <td>UCpHFv-GHkos-LdpQlGB7Zng</td>
-      <td>Kompilasi Squid Game Boneka Baik</td>
-      <td>Boneka Omo Squid Game ingin jadi Baik. Joni me...</td>
+      <th>33071</th>
+      <td>2021-08-18 04:03:45+00:00</td>
+      <td>UCovqoUzPm9_s6mMt9OiWKpA</td>
+      <td>Juru Bicara Taliban Tampil Perdana di Depan Pu...</td>
+      <td>Juru bicara Taliban Zabiullah Mujahid tampil p...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>FILUCUPI</td>
-      <td>NaN</td>
-      <td>1</td>
-      <td>none</td>
-      <td>Kompilasi Squid Game Boneka Baik</td>
-      <td>Boneka Omo Squid Game ingin jadi Baik. Joni me...</td>
-      <td>PT8M20S</td>
-      <td>2d</td>
-      <td>hd</td>
-      <td>False</td>
-      <td>True</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>319586.0</td>
-      <td>6830.0</td>
-      <td>485.0</td>
-      <td>0</td>
-      <td>341.0</td>
-      <td>2021-10-13 06:01:17.448145+00:00</td>
-      <td>id</td>
-      <td>id</td>
-    </tr>
-    <tr>
-      <th>31983</th>
-      <td>2021-08-16 14:10:26+00:00</td>
-      <td>UCmxAIW7RDDC88EPk4ry16Kg</td>
-      <td>Presiden Afghanistan Kabur Bawa Mobil dan Heli...</td>
-      <td>TRIBUN-VIDEO.COM - Diketahui Presiden Afghanis...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Tribunnews</td>
-      <td>['Tribunnews', 'tribun video', 'tribun', 'Pres...</td>
+      <td>Harian Kompas</td>
+      <td>['Afghanistan', 'Afghantaliban', 'amerika seri...</td>
       <td>25</td>
       <td>none</td>
-      <td>Presiden Afghanistan Kabur Bawa Mobil dan Heli...</td>
-      <td>TRIBUN-VIDEO.COM - Diketahui Presiden Afghanis...</td>
-      <td>PT3M24S</td>
+      <td>Juru Bicara Taliban Tampil Perdana di Depan Pu...</td>
+      <td>Juru bicara Taliban Zabiullah Mujahid tampil p...</td>
+      <td>PT1M30S</td>
       <td>2d</td>
       <td>hd</td>
       <td>False</td>
       <td>True</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>2045502.0</td>
-      <td>14059.0</td>
-      <td>1179.0</td>
+      <td>633221.0</td>
+      <td>7531.0</td>
+      <td>275.0</td>
       <td>0</td>
-      <td>5029.0</td>
-      <td>2021-08-23 06:01:31.450836+00:00</td>
+      <td>2875.0</td>
+      <td>2021-08-28 06:00:46.786044+00:00</td>
       <td>id</td>
       <td>id</td>
     </tr>
     <tr>
-      <th>52538</th>
-      <td>2021-12-02 15:59:29+00:00</td>
-      <td>UCU_fuBEbZ0Wcf3ZNWEtxwzg</td>
-      <td>Prahara Warisan &amp; Hak Asuh Anak Alm. Vanessa A...</td>
-      <td>Tanggal Tayang: 02/12/2021\n\nPrahara mengenai...</td>
+      <th>48644</th>
+      <td>2021-11-05 17:28:22+00:00</td>
+      <td>UCkB_AwGXxPAKdahxGHpeC4Q</td>
+      <td>GRAND FINAL DAY 1 | PMPL SEA Championship S4 |...</td>
+      <td>GRAND FINAL TELAH TIBA! PENENTUAN JAWARA DAN 3...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>Hotman Paris Show</td>
-      <td>['iNews', 'Hotman Paris Show', 'Hotman Paris',...</td>
-      <td>24</td>
+      <td>PUBG MOBILE Indonesia</td>
+      <td>['pubg', 'pubgmobile', 'pubg mobile', 'pubg mo...</td>
+      <td>20</td>
       <td>none</td>
-      <td>Prahara Warisan &amp; Hak Asuh Anak Alm. Vanessa A...</td>
-      <td>Tanggal Tayang: 02/12/2021\n\nPrahara mengenai...</td>
-      <td>PT15M29S</td>
+      <td>GRAND FINAL DAY 1 | PMPL SEA Championship S4 |...</td>
+      <td>GRAND FINAL TELAH TIBA! PENENTUAN JAWARA DAN 3...</td>
+      <td>PT6H59M38S</td>
       <td>2d</td>
       <td>hd</td>
       <td>False</td>
-      <td>True</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>1217411.0</td>
-      <td>32163.0</td>
-      <td>627.0</td>
-      <td>0</td>
-      <td>3124.0</td>
-      <td>2021-12-05 06:00:55.757787+00:00</td>
-      <td>id</td>
-      <td>id</td>
-    </tr>
-    <tr>
-      <th>35054</th>
-      <td>2021-09-04 13:17:12+00:00</td>
-      <td>UCaxNFw2ryxzjSAxRVP-0Dfg</td>
-      <td>Saat Teduh Bersama - JANGAN TUNDA KESELAMATAN ...</td>
-      <td>Di jaman seperti ini kesempatan tidak tentu da...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Philip Mantofa</td>
-      <td>['Christianity', 'Holy Spirit', 'Jesus', 'Mira...</td>
-      <td>29</td>
-      <td>none</td>
-      <td>Saat Teduh Bersama - JANGAN TUNDA KESELAMATAN ...</td>
-      <td>Di jaman seperti ini kesempatan tidak tentu da...</td>
-      <td>PT1H9M28S</td>
-      <td>2d</td>
-      <td>hd</td>
       <td>False</td>
-      <td>True</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>141464.0</td>
-      <td>11426.0</td>
-      <td>102.0</td>
+      <td>2672077.0</td>
+      <td>60064.0</td>
+      <td>1210.0</td>
       <td>0</td>
-      <td>1033.0</td>
-      <td>2021-09-07 06:00:48.332164+00:00</td>
+      <td>424.0</td>
+      <td>2021-11-14 06:01:05.586874+00:00</td>
       <td>en</td>
       <td>id</td>
     </tr>
     <tr>
-      <th>39753</th>
-      <td>2021-09-28 08:41:15+00:00</td>
-      <td>UCwIzd032IQjvJ9larkdcwgg</td>
-      <td>YA AMPUN, AKU BOKEK! || Kiat dan Trik Orang Ka...</td>
-      <td>Jadi tajir itu memang keren banget! Tapi hanya...</td>
+      <th>33287</th>
+      <td>2021-08-19 12:00:06+00:00</td>
+      <td>UCkjCVt4XfWH_S_2_ayNTTIA</td>
+      <td>Detik-detik Polisi Intai Geng Motor yang Mau B...</td>
+      <td>86 merupakan tontonan yang segar dan dapat mem...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>123 GO! GOLD Indonesian</td>
-      <td>['123', '123 go', '123go', '123 go gold', '123...</td>
+      <td>86 &amp; Custom Protection NET</td>
+      <td>['86', 'Polisi', 'Polisi Indonesia', 'Indonesi...</td>
       <td>24</td>
       <td>none</td>
-      <td>YA AMPUN, AKU BOKEK! || Kiat dan Trik Orang Ka...</td>
-      <td>Jadi tajir itu memang keren banget! Tapi hanya...</td>
-      <td>PT30M21S</td>
+      <td>Detik-detik Polisi Intai Geng Motor yang Mau B...</td>
+      <td>86 merupakan tontonan yang segar dan dapat mem...</td>
+      <td>PT13M17S</td>
       <td>2d</td>
       <td>hd</td>
       <td>False</td>
       <td>True</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>1066896.0</td>
-      <td>10711.0</td>
-      <td>1794.0</td>
+      <td>1834600.0</td>
+      <td>23943.0</td>
+      <td>796.0</td>
       <td>0</td>
-      <td>415.0</td>
-      <td>2021-10-01 06:01:28.506925+00:00</td>
+      <td>3432.0</td>
+      <td>2021-08-29 06:00:53.318778+00:00</td>
       <td>id</td>
       <td>id</td>
     </tr>
     <tr>
-      <th>46383</th>
-      <td>2021-11-01 16:15:02+00:00</td>
-      <td>UCDYTV5VU6XOSosqzx9gNABQ</td>
-      <td>PARA JURI DI BUAT TAK PERCAYA DENGAN NASTASYA ...</td>
-      <td>Para Juri Di Buat Tak Percaya Dengan Natasyah ...</td>
+      <th>48908</th>
+      <td>2021-11-05 08:00:16+00:00</td>
+      <td>UCRvcjozVQBiOMQ4UyoAy-fA</td>
+      <td>Woro Widowati - TOP-TOPAN ( Official Music Video)</td>
+      <td>Woro Widowati-TOP-TOPAN (Official Music Video)...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>KDI MNCTV</td>
-      <td>['rhoma irama ngantri kdi', 'bunda hetty ngant...</td>
+      <td>WORO WIDOWATI OFFICIAL</td>
+      <td>['Jawa', 'Pop', 'TOP-TOPAN', 'Woro Widowati', ...</td>
       <td>10</td>
       <td>none</td>
-      <td>PARA JURI DI BUAT TAK PERCAYA DENGAN NASTASYA ...</td>
-      <td>Para Juri Di Buat Tak Percaya Dengan Natasyah ...</td>
-      <td>PT5M31S</td>
+      <td>Woro Widowati - TOP-TOPAN ( Official Music Video)</td>
+      <td>Woro Widowati-TOP-TOPAN (Official Music Video)...</td>
+      <td>PT4M5S</td>
       <td>2d</td>
       <td>hd</td>
       <td>False</td>
       <td>True</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>150515.0</td>
-      <td>4387.0</td>
-      <td>67.0</td>
+      <td>738679.0</td>
+      <td>17223.0</td>
+      <td>235.0</td>
       <td>0</td>
-      <td>184.0</td>
-      <td>2021-11-03 06:00:50.788689+00:00</td>
+      <td>1111.0</td>
+      <td>2021-11-15 06:02:48.690300+00:00</td>
+      <td>en</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>40826</th>
+      <td>2021-09-29 23:01:00+00:00</td>
+      <td>UCo8h2TY_uBkAVUIc14m_KCA</td>
+      <td>Kuasa Hukum Luhut: Haris Azhar Minta Saham Fre...</td>
+      <td>Juniver Girsang, pengacara Luhut, mengatakan H...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Najwa Shihab</td>
+      <td>['najwa shihab', 'mata najwa', 'narasi', 'nara...</td>
+      <td>25</td>
+      <td>none</td>
+      <td>Kuasa Hukum Luhut: Haris Azhar Minta Saham Fre...</td>
+      <td>Juniver Girsang, pengacara Luhut, mengatakan H...</td>
+      <td>PT12M6S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>675563.0</td>
+      <td>7175.0</td>
+      <td>500.0</td>
+      <td>0</td>
+      <td>4559.0</td>
+      <td>2021-10-06 06:01:07.928348+00:00</td>
+      <td>id</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>37697</th>
+      <td>2021-09-18 14:39:06+00:00</td>
+      <td>UCW6fcXU68QShoXPkxnPxATw</td>
+      <td>THE POWER OF CEMISTRY TEAM !! DAPA + SEAN  = G...</td>
+      <td>Download NoxCleaner sekarang, menangkan 2180 D...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>FrontaL Gaming</td>
+      <td>NaN</td>
+      <td>20</td>
+      <td>none</td>
+      <td>THE POWER OF CEMISTRY TEAM !! DAPA + SEAN  = G...</td>
+      <td>Download NoxCleaner sekarang, menangkan 2180 D...</td>
+      <td>PT19M2S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>462878.0</td>
+      <td>41147.0</td>
+      <td>488.0</td>
+      <td>0</td>
+      <td>2149.0</td>
+      <td>2021-09-20 06:00:52.963481+00:00</td>
+      <td>en</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <th>32951</th>
+      <td>2021-08-15 05:15:13+00:00</td>
+      <td>UCP3J77MiNCYxhRnfHmeWk7Q</td>
+      <td>Mendung Tanpo Udan - Yeni Inka feat Fendik Ade...</td>
+      <td>Title : Mendung Tanpo Udan\nArtist : Yeni Inka...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Henny Adella</td>
+      <td>['henny adella', 'yeni inka', 'versi latihan',...</td>
+      <td>24</td>
+      <td>none</td>
+      <td>Mendung Tanpo Udan - Yeni Inka feat Fendik Ade...</td>
+      <td>Title : Mendung Tanpo Udan\nArtist : Yeni Inka...</td>
+      <td>PT6M27S</td>
+      <td>2d</td>
+      <td>hd</td>
+      <td>False</td>
+      <td>True</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>5671508.0</td>
+      <td>77118.0</td>
+      <td>3043.0</td>
+      <td>0</td>
+      <td>10081.0</td>
+      <td>2021-08-28 06:00:46.785115+00:00</td>
       <td>id</td>
       <td>id</td>
     </tr>
@@ -1962,7 +1988,7 @@ memory usage: 6.1+ MB
 </div>
 </div>
 </div>
-<div class="cell tag_output_scroll docutils container">
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span>
 </pre></div>
@@ -2030,38 +2056,38 @@ memory usage: 6.1+ MB
       <td>...</td>
     </tr>
     <tr>
-      <th>17734</th>
+      <th>17730</th>
       <td>Nazia Marwiana - Kehadiran Cinta (Official Mus...</td>
       <td>Official Music Live from Nazia Marwiana - Keha...</td>
       <td>10</td>
     </tr>
     <tr>
-      <th>17735</th>
+      <th>17731</th>
       <td>ARSY DAN THALIA ONSU DUET SAMPAI BIKIN RAFFI A...</td>
       <td>Gemes! Arsy dan Thalia Putri Onsu duet nyanyi ...</td>
       <td>24</td>
     </tr>
     <tr>
-      <th>17736</th>
+      <th>17732</th>
       <td>Beli barang aneh yang dijual ONLINE Episode 20!</td>
       <td>Banyak lap nya.\n\nDapatkan Betadine Cold Defe...</td>
       <td>28</td>
     </tr>
     <tr>
-      <th>17737</th>
+      <th>17733</th>
       <td>Layangan Putus | Highlight EP02 Senyum Bahagia...</td>
       <td>Yuk tonton full episodenya, GRATIS melalui app...</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>17738</th>
+      <th>17734</th>
       <td>PAULA LEMES , GA BISA NGOMONG APA2..</td>
       <td>=================================\r\n\r\nSocia...</td>
       <td>24</td>
     </tr>
   </tbody>
 </table>
-<p>17739 rows × 3 columns</p>
+<p>17735 rows × 3 columns</p>
 </div></div></div>
 </div>
 </div>
@@ -2089,7 +2115,7 @@ memory usage: 6.1+ MB
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(3652, 3)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(3651, 3)
 </pre></div>
 </div>
 </div>
@@ -2121,7 +2147,7 @@ memory usage: 6.1+ MB
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>How many titles use emoji? 534
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>How many titles use emoji? 522
 </pre></div>
 </div>
 </div>
@@ -2137,13 +2163,25 @@ memory usage: 6.1+ MB
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">demojize</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">em</span> <span class="ow">in</span> <span class="n">list_emoji</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">em</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">em_text</span> <span class="o">=</span> <span class="n">emoji</span><span class="o">.</span><span class="n">demojize</span><span class="p">(</span><span class="n">em</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">em</span><span class="p">,</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">em_text</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;title_emoji&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">demojize</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <p>Mari kita lihat beberapa sampel judul yang menggunakan emoji dan bagaimana bentuk representasi teksnya.</p>
-<div class="cell tag_output_scroll docutils container">
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">title_with_emoji_idx</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">title</span><span class="p">))</span>
@@ -2154,7 +2192,7 @@ memory usage: 6.1+ MB
 </div>
 </div>
 </div>
-<div class="cell tag_output_scroll docutils container">
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;display.max_colwidth&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">):</span>
     <span class="n">display</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">title_with_emoji_idx</span><span class="p">])</span>
@@ -2188,21 +2226,21 @@ memory usage: 6.1+ MB
   </thead>
   <tbody>
     <tr>
-      <th>34</th>
+      <th>33</th>
       <td>Dari Jendela Smp : GREGETTT...Wih kelihatannya Wulan jadi primadona di SMA Merdeka Mandiri nih...❤</td>
       <td>Saksikan #DariJendelaSMP Setiap Hari Pkl. 16.40 WIB hanya di @Surya Citra Televisi (SCTV) \n@sin...</td>
       <td>24</td>
       <td>Dari Jendela Smp : GREGETTT...Wih kelihatannya Wulan jadi primadona di SMA Merdeka Mandiri nih.....</td>
     </tr>
     <tr>
-      <th>79</th>
+      <th>78</th>
       <td>BIKIN CEWEK TERPESONA 😍 Aksi Heroik Driver Muda Menolong Sopir Yang Kesulitan di Sitinjau Lauik</td>
       <td>Aksi heroik driver muda membantu sopir minibus yang kesulitan di Sitinjau Lauik\n\ninstagram : h...</td>
       <td>2</td>
       <td>BIKIN CEWEK TERPESONA  :smiling_face_with_heart-eyes:  Aksi Heroik Driver Muda Menolong Sopir Ya...</td>
     </tr>
     <tr>
-      <th>81</th>
+      <th>80</th>
       <td>15 MENIT MEMBAKAR LEMAK 1 Kg !!! 24 Jam TIMBANGAN TURUN ✅ ✅ ✅</td>
       <td>15 menit membakar lemak, ok ! siapa yg workout mengharapkan bisa membakar 1 kg lemak dalam 15 me...</td>
       <td>26</td>
@@ -2258,7 +2296,7 @@ memory usage: 6.1+ MB
       <td>:green_heart: Indonesian NCTzens Aku Bersamamu :green_heart:  | Tokopedia WIB: Indonesia K-Pop ...</td>
     </tr>
     <tr>
-      <th>3617</th>
+      <th>3616</th>
       <td>Astaga..Konro bakar Indonesia bisa menyembuhkan pasien ya..?!🤣</td>
       <td>#IndonesianFood#KonroBakar#꽁로바까르\nMukbang Konro bakar!!!!!!!!!!!!!!!!!\nBibi kangkung auto seman...</td>
       <td>24</td>
@@ -2266,7 +2304,7 @@ memory usage: 6.1+ MB
     </tr>
   </tbody>
 </table>
-<p>534 rows × 4 columns</p>
+<p>522 rows × 4 columns</p>
 </div></div></div>
 </div>
 <p>Karena kita sudah mendapatkan representasi emoji pada kolom <code class="docutils literal notranslate"><span class="pre">title_emoji</span></code>, kita tidak memerlukan kolom <code class="docutils literal notranslate"><span class="pre">title</span></code> lagi. Sehingga, kita bisa buang kolom tersebut.</p>
@@ -2282,7 +2320,7 @@ memory usage: 6.1+ MB
 <p class="admonition-title">Eksplorasi</p>
 <p>Ada berapa video yang deskripsinya menggunakan emoji?</p>
 </div>
-<div class="cell tag_output_scroll docutils container">
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">desc_with_emoji_idx</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">description</span><span class="p">))</span>
@@ -2331,32 +2369,32 @@ memory usage: 6.1+ MB
       <td>Rizky Billar - Pemimpinmu | Official Music Video\n\nSurprise Untuk Dede Lesti :\nhttps://youtu.b...</td>
     </tr>
     <tr>
-      <th>8</th>
-      <td>#LestiBawaAkuKePenghulu #Lesti #MusicVideo #LiveAcoustic\n\nAura bahagia semakin terpancar denga...</td>
-      <td>10</td>
-      <td>Lesti - Bawa Aku Ke Penghulu | Live Acoustic Version</td>
-      <td>#LestiBawaAkuKePenghulu #Lesti #MusicVideo #LiveAcoustic\n\nAura bahagia semakin terpancar denga...</td>
-    </tr>
-    <tr>
-      <th>11</th>
+      <th>10</th>
       <td>Title: Sempurnakan Hariku \nArtist: Rey Mbayang\nComposser: Rey Mbayang, Trakast\nMusic Arranger...</td>
       <td>10</td>
       <td>Rey Mbayang - Sempurnakan Hariku (Official Music Video)</td>
       <td>Title: Sempurnakan Hariku \nArtist: Rey Mbayang\nComposser: Rey Mbayang, Trakast\nMusic Arranger...</td>
     </tr>
     <tr>
-      <th>12</th>
+      <th>11</th>
       <td>Title: Apa Kabar Mantan\nArtist: Yeni Inka\nSongwriter: Yonanda NDX\n\nFollow juga kita disini y...</td>
       <td>10</td>
       <td>Yeni Inka - Apa Kabar Mantan (Official Music Video ANEKA SAFARI) | JOOX ORIGINAL</td>
       <td>Title: Apa Kabar Mantan\nArtist: Yeni Inka\nSongwriter: Yonanda NDX\n\nFollow juga kita disini y...</td>
     </tr>
     <tr>
-      <th>12</th>
+      <th>11</th>
       <td>Title: Apa Kabar Mantan\nArtist: Yeni Inka\nSongwriter: Yonanda NDX\n\nFollow juga kita disini y...</td>
       <td>10</td>
       <td>Yeni Inka - Apa Kabar Mantan (Official Music Video ANEKA SAFARI) | JOOX ORIGINAL</td>
       <td>Title: Apa Kabar Mantan\nArtist: Yeni Inka\nSongwriter: Yonanda NDX\n\nFollow juga kita disini y...</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>#ByoodeJanganCobaCoba #Byoode #MusicVideo #Girlband #Dangdut\n\nDengerin lagu Byoode - Jangan Co...</td>
+      <td>10</td>
+      <td>Byoode - Jangan Coba Coba | Official Music Video</td>
+      <td>#ByoodeJanganCobaCoba #Byoode #MusicVideo #Girlband #Dangdut\n\nDengerin lagu Byoode - Jangan Co...</td>
     </tr>
     <tr>
       <th>...</th>
@@ -2366,35 +2404,35 @@ memory usage: 6.1+ MB
       <td>...</td>
     </tr>
     <tr>
-      <th>3618</th>
-      <td>Singer :  Yeni Inka\nJudul  :  Lali Janjine\nCipt.    :  S Harsono\nMusik : Lagista\nLabel.  : S...</td>
-      <td>10</td>
-      <td>Lali Janjine - Yeni Inka (Official Music Video)</td>
-      <td>Singer :  Yeni Inka\nJudul  :  Lali Janjine\nCipt.    :  S Harsono\nMusik : Lagista\nLabel.  : S...</td>
+      <th>3638</th>
+      <td>🎥 HIGHLIGHTS | 🇸🇬 Singapore 3-0 Myanmar 🇲🇲\n\n🦁 A brace from Ikhsan Fandi and one from Safuwan B...</td>
+      <td>17</td>
+      <td>Singapore 3-0 Myanmar (AFF Suzuki Cup 2020: Group Stage)</td>
+      <td>:movie_camera:  HIGHLIGHTS |  :Singapore:  Singapore 3-0 Myanmar  :Myanmar_(Burma): \n\n :lion:...</td>
+    </tr>
+    <tr>
+      <th>3638</th>
+      <td>🎥 HIGHLIGHTS | 🇸🇬 Singapore 3-0 Myanmar 🇲🇲\n\n🦁 A brace from Ikhsan Fandi and one from Safuwan B...</td>
+      <td>17</td>
+      <td>Singapore 3-0 Myanmar (AFF Suzuki Cup 2020: Group Stage)</td>
+      <td>:movie_camera:  HIGHLIGHTS |  :Singapore:  Singapore 3-0 Myanmar  :Myanmar_(Burma): \n\n :lion:...</td>
+    </tr>
+    <tr>
+      <th>3638</th>
+      <td>🎥 HIGHLIGHTS | 🇸🇬 Singapore 3-0 Myanmar 🇲🇲\n\n🦁 A brace from Ikhsan Fandi and one from Safuwan B...</td>
+      <td>17</td>
+      <td>Singapore 3-0 Myanmar (AFF Suzuki Cup 2020: Group Stage)</td>
+      <td>:movie_camera:  HIGHLIGHTS |  :Singapore:  Singapore 3-0 Myanmar  :Myanmar_(Burma): \n\n :lion:...</td>
+    </tr>
+    <tr>
+      <th>3638</th>
+      <td>🎥 HIGHLIGHTS | 🇸🇬 Singapore 3-0 Myanmar 🇲🇲\n\n🦁 A brace from Ikhsan Fandi and one from Safuwan B...</td>
+      <td>17</td>
+      <td>Singapore 3-0 Myanmar (AFF Suzuki Cup 2020: Group Stage)</td>
+      <td>:movie_camera:  HIGHLIGHTS |  :Singapore:  Singapore 3-0 Myanmar  :Myanmar_(Burma): \n\n :lion:...</td>
     </tr>
     <tr>
       <th>3639</th>
-      <td>⚠ Peringatan untuk penonton ⚠ \n\nAnime ini tidak cocok ditonton oleh anak di bawah 13 tahun. Pe...</td>
-      <td>1</td>
-      <td>Mushoku Tensei: Jobless Reincarnation - Episode 21 [Takarir Indonesia]</td>
-      <td>:warning:  Peringatan untuk penonton  :warning:  \n\nAnime ini tidak cocok ditonton oleh anak d...</td>
-    </tr>
-    <tr>
-      <th>3639</th>
-      <td>⚠ Peringatan untuk penonton ⚠ \n\nAnime ini tidak cocok ditonton oleh anak di bawah 13 tahun. Pe...</td>
-      <td>1</td>
-      <td>Mushoku Tensei: Jobless Reincarnation - Episode 21 [Takarir Indonesia]</td>
-      <td>:warning:  Peringatan untuk penonton  :warning:  \n\nAnime ini tidak cocok ditonton oleh anak d...</td>
-    </tr>
-    <tr>
-      <th>3639</th>
-      <td>⚠ Peringatan untuk penonton ⚠ \n\nAnime ini tidak cocok ditonton oleh anak di bawah 13 tahun. Pe...</td>
-      <td>1</td>
-      <td>Mushoku Tensei: Jobless Reincarnation - Episode 21 [Takarir Indonesia]</td>
-      <td>:warning:  Peringatan untuk penonton  :warning:  \n\nAnime ini tidak cocok ditonton oleh anak d...</td>
-    </tr>
-    <tr>
-      <th>3640</th>
       <td>▶ Follow aku!\nInstagram - https://www.instagram.com/ekooju/\nOura Store - https://www.instagram...</td>
       <td>20</td>
       <td>Gerrard Wijaya Si Publik Paling Kreatif Penemu BUG2 Aneh!! - Rect TikTok #21</td>
@@ -2402,7 +2440,7 @@ memory usage: 6.1+ MB
     </tr>
   </tbody>
 </table>
-<p>1799 rows × 4 columns</p>
+<p>1823 rows × 4 columns</p>
 </div></div></div>
 </div>
 <p>Kita juga bisa buang kolom <code class="docutils literal notranslate"><span class="pre">description</span></code> karena kita tidak membutuhkannya lagi.</p>
@@ -2426,7 +2464,7 @@ memory usage: 6.1+ MB
 <p class="admonition-title">Note</p>
 <p>Kita akan bagi data terlebih dahulu menjadi <em>training</em> dan <em>development</em>.</p>
 </div>
-<div class="cell tag_output_scroll docutils container">
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># data split</span>
 <span class="n">X_train</span><span class="p">,</span> <span class="n">X_dev</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_dev</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
@@ -2460,11 +2498,11 @@ memory usage: 6.1+ MB
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>training_size = 2921.. dev_size = 731
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>training_size = 2920.. dev_size = 731
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Got train tf-idf with shape: (2921, 958)
-Got dev tf-idf with shape: (731, 958)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Got train tf-idf with shape: (2920, 955)
+Got dev tf-idf with shape: (731, 955)
 </pre></div>
 </div>
 </div>
@@ -2496,11 +2534,11 @@ Got dev tf-idf with shape: (731, 958)
     <tr style="text-align: right;">
       <th></th>
       <th>00</th>
-      <th>000</th>
       <th>01</th>
       <th>02</th>
       <th>03</th>
       <th>04</th>
+      <th>05</th>
       <th>06</th>
       <th>07</th>
       <th>08</th>
@@ -2509,6 +2547,7 @@ Got dev tf-idf with shape: (731, 958)
       <th>100</th>
       <th>11</th>
       <th>12</th>
+      <th>1212</th>
       <th>123</th>
       <th>13</th>
       <th>14</th>
@@ -2538,18 +2577,18 @@ Got dev tf-idf with shape: (731, 958)
       <th>45</th>
       <th>50</th>
       <th>62</th>
-      <th>about</th>
       <th>acara</th>
-      <th>account</th>
       <th>ada</th>
       <th>adalah</th>
       <th>adanya</th>
       <th>admin</th>
+      <th>agar</th>
       <th>...</th>
+      <th>untukmu</th>
       <th>up</th>
       <th>update</th>
-      <th>upload</th>
       <th>us</th>
+      <th>usai</th>
       <th>user</th>
       <th>utama</th>
       <th>utm_medium</th>
@@ -2561,6 +2600,7 @@ Got dev tf-idf with shape: (731, 958)
       <th>vidio</th>
       <th>viral</th>
       <th>vita</th>
+      <th>vlog</th>
       <th>voc</th>
       <th>vocal</th>
       <th>vs</th>
@@ -2569,7 +2609,6 @@ Got dev tf-idf with shape: (731, 958)
       <th>waktu</th>
       <th>wanita</th>
       <th>warga</th>
-      <th>warna</th>
       <th>watch</th>
       <th>watching</th>
       <th>web</th>
@@ -2585,7 +2624,6 @@ Got dev tf-idf with shape: (731, 958)
       <th>yaa</th>
       <th>yah</th>
       <th>yaitu</th>
-      <th>yakin</th>
       <th>yang</th>
       <th>yen</th>
       <th>yeni</th>
@@ -2600,380 +2638,28 @@ Got dev tf-idf with shape: (731, 958)
   </thead>
   <tbody>
     <tr>
-      <th>2285</th>
+      <th>1108</th>
       <td>0.000000</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.038006</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.063318</td>
-      <td>0.14526</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.128947</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.045184</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.123574</td>
-      <td>0.091496</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.099413</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.065366</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.059746</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>391</th>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.021872</td>
-      <td>0.022238</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.017935</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.025805</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.046252</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.072203</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.00000</td>
-      <td>0.024207</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.020552</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.159262</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.019294</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.026453</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>105</th>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.498869</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
       <td>0.0</td>
       <td>0.0</td>
+      <td>0.097109</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.071046</td>
-      <td>0.00000</td>
-      <td>0.092019</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.217029</td>
-      <td>0.092959</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.086487</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.110926</td>
-      <td>0.051332</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.027887</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.073344</td>
-      <td>0.0</td>
-      <td>0.055924</td>
-      <td>0.134076</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>2050</th>
-      <td>0.086611</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.191518</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.092492</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.107424</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>0.000000</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>...</td>
       <td>0.000000</td>
       <td>0.0</td>
-      <td>0.0</td>
       <td>0.000000</td>
-      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
       <td>0.00000</td>
       <td>0.000000</td>
       <td>0.0</td>
@@ -2981,6 +2667,39 @@ Got dev tf-idf with shape: (731, 958)
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
+      <td>0.051395</td>
+      <td>0.164723</td>
+      <td>0.092011</td>
+      <td>0.219208</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.155709</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.060209</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
       <td>0.000000</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -2988,52 +2707,45 @@ Got dev tf-idf with shape: (731, 958)
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0000</td>
+      <td>0.0</td>
+      <td>0.072479</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.033842</td>
+      <td>0.062587</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.101869</td>
       <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.271827</td>
       <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.068780</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.081287</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.340490</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.136420</td>
       <td>0.0</td>
     </tr>
     <tr>
-      <th>2044</th>
-      <td>0.133694</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.192701</td>
-      <td>0.0</td>
-      <td>0.097335</td>
-      <td>0.0</td>
-      <td>0.089173</td>
-      <td>0.174118</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.074012</td>
-      <td>0.083406</td>
-      <td>0.0</td>
+      <th>1406</th>
       <td>0.000000</td>
-      <td>0.088515</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -3043,34 +2755,86 @@ Got dev tf-idf with shape: (731, 958)
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.071387</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>0.075133</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.000000</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>0.051552</td>
-      <td>0.0</td>
+      <td>0.000000</td>
       <td>0.0</td>
       <td>0.0</td>
+      <td>0.08517</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.045617</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.069102</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
       <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
       <td>0.000000</td>
       <td>0.0</td>
       <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0000</td>
+      <td>0.0</td>
+      <td>0.064331</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.060076</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.060278</td>
       <td>0.000000</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -3078,6 +2842,240 @@ Got dev tf-idf with shape: (731, 958)
       <td>0.0</td>
       <td>0.0</td>
       <td>0.000000</td>
+      <td>0.109224</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>627</th>
+      <td>0.418872</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.152969</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.184151</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.00000</td>
+      <td>0.153805</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.195112</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0000</td>
+      <td>0.0</td>
+      <td>0.130975</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.183468</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1833</th>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.082816</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.00000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.042449</td>
+      <td>0.000000</td>
+      <td>0.151991</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.136918</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.035857</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.083856</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.084138</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.203278</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1776</th>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.00000</td>
       <td>0.000000</td>
       <td>0.0</td>
@@ -3086,6 +3084,16 @@ Got dev tf-idf with shape: (731, 958)
       <td>0.0</td>
       <td>0.0</td>
       <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -3093,35 +3101,65 @@ Got dev tf-idf with shape: (731, 958)
       <td>0.0</td>
       <td>0.0</td>
       <td>0.000000</td>
-      <td>0.000000</td>
       <td>0.0</td>
-      <td>0.053085</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.087111</td>
-      <td>0.000000</td>
-      <td>0.081347</td>
+      <td>...</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.058399</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.000000</td>
       <td>0.0</td>
+      <td>0.032933</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.6451</td>
+      <td>0.0</td>
       <td>0.000000</td>
-      <td>0.175485</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.164786</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
       <td>0.0</td>
     </tr>
   </tbody>
 </table>
-<p>5 rows × 958 columns</p>
+<p>5 rows × 955 columns</p>
 </div></div></div>
 </div>
 </div>
@@ -3156,7 +3194,7 @@ Got dev tf-idf with shape: (731, 958)
 </div>
 </div>
 </div>
-<div class="cell tag_output_scroll docutils container">
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">dict_models</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-- </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> --&quot;</span><span class="p">)</span>
@@ -3173,100 +3211,101 @@ Got dev tf-idf with shape: (731, 958)
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reports on dev set:
               precision    recall  f1-score   support
 
-           1       0.91      0.50      0.65        20
-           2       1.00      0.70      0.82        20
-          10       0.92      0.92      0.92       141
-          15       1.00      0.14      0.25         7
-          17       1.00      0.31      0.47        13
+           1       0.88      0.35      0.50        20
+           2       1.00      0.80      0.89        20
+          10       0.94      0.93      0.94       142
+          15       1.00      0.43      0.60         7
+          17       0.83      0.36      0.50        14
           19       0.00      0.00      0.00         5
-          20       0.85      0.87      0.86        54
-          22       0.66      0.59      0.62        70
-          23       0.93      0.84      0.89        32
-          24       0.72      0.88      0.79       229
-          25       0.81      0.96      0.88        99
+          20       0.96      0.81      0.88        53
+          22       0.69      0.57      0.62        70
+          23       0.83      0.47      0.60        32
+          24       0.68      0.92      0.78       228
+          25       0.85      0.96      0.90        99
           26       0.80      0.25      0.38        16
           27       1.00      0.12      0.22         8
           28       1.00      0.57      0.73         7
           29       1.00      0.80      0.89        10
 
     accuracy                           0.80       731
-   macro avg       0.84      0.56      0.62       731
-weighted avg       0.81      0.80      0.79       731
+   macro avg       0.83      0.56      0.63       731
+weighted avg       0.81      0.80      0.78       731
 
 -- MultinomialNB --
 Reports on dev set:
               precision    recall  f1-score   support
 
-           1       1.00      0.25      0.40        20
-           2       1.00      0.25      0.40        20
-          10       0.88      0.89      0.88       141
+           1       1.00      0.10      0.18        20
+           2       1.00      0.35      0.52        20
+          10       0.94      0.93      0.94       142
           15       0.00      0.00      0.00         7
-          17       1.00      0.31      0.47        13
+          17       1.00      0.36      0.53        14
           19       0.00      0.00      0.00         5
-          20       0.85      0.83      0.84        54
-          22       0.65      0.43      0.52        70
-          23       1.00      0.28      0.44        32
-          24       0.60      0.81      0.69       229
-          25       0.71      0.96      0.82        99
-          26       0.47      0.50      0.48        16
+          20       0.91      0.75      0.82        53
+          22       0.71      0.50      0.59        70
+          23       0.90      0.28      0.43        32
+          24       0.62      0.88      0.72       228
+          25       0.76      0.97      0.85        99
+          26       0.53      0.50      0.52        16
           27       0.00      0.00      0.00         8
           28       0.00      0.00      0.00         7
           29       1.00      0.80      0.89        10
 
-    accuracy                           0.71       731
-   macro avg       0.61      0.42      0.46       731
-weighted avg       0.72      0.71      0.68       731
+    accuracy                           0.74       731
+   macro avg       0.63      0.43      0.47       731
+weighted avg       0.75      0.74      0.71       731
 
 -- LinearSVC --
-Reports on dev set:
-              precision    recall  f1-score   support
-
-           1       0.76      0.65      0.70        20
-           2       1.00      0.80      0.89        20
-          10       0.94      0.94      0.94       141
-          15       1.00      0.57      0.73         7
-          17       0.75      0.46      0.57        13
-          19       1.00      0.80      0.89         5
-          20       0.85      0.93      0.88        54
-          22       0.76      0.79      0.77        70
-          23       0.91      0.91      0.91        32
-          24       0.87      0.87      0.87       229
-          25       0.82      0.96      0.88        99
-          26       0.79      0.69      0.73        16
-          27       0.86      0.75      0.80         8
-          28       1.00      0.71      0.83         7
-          29       1.00      0.80      0.89        10
-
-    accuracy                           0.87       731
-   macro avg       0.89      0.77      0.82       731
-weighted avg       0.87      0.87      0.86       731
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-- DecisionTreeClassifier --
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reports on dev set:
               precision    recall  f1-score   support
 
-           1       0.75      0.75      0.75        20
-           2       0.81      0.85      0.83        20
-          10       0.89      0.86      0.87       141
-          15       1.00      0.57      0.73         7
-          17       0.42      0.38      0.40        13
-          19       0.60      0.60      0.60         5
-          20       0.87      0.83      0.85        54
-          22       0.59      0.63      0.61        70
-          23       0.71      0.91      0.79        32
-          24       0.79      0.81      0.80       229
-          25       0.83      0.84      0.83        99
-          26       0.53      0.50      0.52        16
-          27       0.33      0.25      0.29         8
-          28       1.00      0.43      0.60         7
+           1       0.75      0.60      0.67        20
+           2       0.87      1.00      0.93        20
+          10       0.95      0.95      0.95       142
+          15       1.00      0.86      0.92         7
+          17       0.86      0.43      0.57        14
+          19       1.00      0.80      0.89         5
+          20       0.91      0.96      0.94        53
+          22       0.81      0.77      0.79        70
+          23       0.89      0.78      0.83        32
+          24       0.86      0.88      0.87       228
+          25       0.83      0.95      0.89        99
+          26       0.67      0.62      0.65        16
+          27       1.00      0.75      0.86         8
+          28       1.00      0.71      0.83         7
           29       1.00      0.80      0.89        10
 
-    accuracy                           0.78       731
-   macro avg       0.74      0.67      0.69       731
-weighted avg       0.79      0.78      0.78       731
+    accuracy                           0.87       731
+   macro avg       0.89      0.79      0.83       731
+weighted avg       0.87      0.87      0.87       731
+
+-- DecisionTreeClassifier --
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reports on dev set:
+              precision    recall  f1-score   support
+
+           1       0.60      0.45      0.51        20
+           2       0.89      0.80      0.84        20
+          10       0.94      0.83      0.88       142
+          15       1.00      0.86      0.92         7
+          17       1.00      0.57      0.73        14
+          19       0.75      0.60      0.67         5
+          20       0.81      0.72      0.76        53
+          22       0.56      0.69      0.62        70
+          23       0.65      0.88      0.75        32
+          24       0.76      0.79      0.78       228
+          25       0.79      0.78      0.79        99
+          26       0.55      0.69      0.61        16
+          27       0.55      0.75      0.63         8
+          28       0.80      0.57      0.67         7
+          29       1.00      0.80      0.89        10
+
+    accuracy                           0.77       731
+   macro avg       0.78      0.72      0.74       731
+weighted avg       0.78      0.77      0.77       731
 
 -- RandomForestClassifier --
 </pre></div>
@@ -3274,24 +3313,24 @@ weighted avg       0.79      0.78      0.78       731
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reports on dev set:
               precision    recall  f1-score   support
 
-           1       1.00      0.60      0.75        20
+           1       0.83      0.50      0.62        20
            2       1.00      0.95      0.97        20
-          10       0.93      0.95      0.94       141
-          15       1.00      0.57      0.73         7
-          17       0.86      0.46      0.60        13
+          10       0.96      0.95      0.96       142
+          15       1.00      0.86      0.92         7
+          17       1.00      0.50      0.67        14
           19       1.00      0.80      0.89         5
-          20       0.91      0.91      0.91        54
-          22       0.90      0.77      0.83        70
-          23       1.00      0.94      0.97        32
-          24       0.82      0.90      0.86       229
-          25       0.86      1.00      0.93        99
-          26       0.83      0.62      0.71        16
+          20       0.94      0.89      0.91        53
+          22       0.95      0.79      0.86        70
+          23       1.00      0.88      0.93        32
+          24       0.79      0.91      0.85       228
+          25       0.85      0.96      0.90        99
+          26       0.79      0.69      0.73        16
           27       1.00      0.75      0.86         8
           28       1.00      0.71      0.83         7
           29       1.00      0.80      0.89        10
 
     accuracy                           0.88       731
-   macro avg       0.94      0.78      0.84       731
+   macro avg       0.94      0.80      0.85       731
 weighted avg       0.89      0.88      0.88       731
 </pre></div>
 </div>
@@ -3325,48 +3364,48 @@ weighted avg       0.89      0.88      0.88       731
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reports on train set:
               precision    recall  f1-score   support
 
-           1       0.99      0.94      0.96        80
-           2       1.00      1.00      1.00        80
-          10       0.97      0.99      0.98       562
+           1       1.00      0.95      0.97        81
+           2       1.00      1.00      1.00        79
+          10       0.96      0.99      0.98       566
           15       1.00      1.00      1.00        26
-          17       0.96      1.00      0.98        53
-          19       1.00      1.00      1.00        19
-          20       0.98      0.98      0.98       217
-          22       0.96      0.89      0.93       278
-          23       0.98      0.98      0.98       128
-          24       0.96      0.95      0.96       915
-          25       0.95      0.99      0.97       394
-          26       0.91      0.95      0.93        65
+          17       0.95      0.96      0.96        56
+          19       1.00      0.95      0.97        19
+          20       0.98      0.99      0.98       212
+          22       0.97      0.90      0.93       278
+          23       0.97      0.97      0.97       128
+          24       0.96      0.96      0.96       911
+          25       0.97      0.99      0.98       395
+          26       0.91      0.92      0.92        65
           27       1.00      0.97      0.99        34
           28       1.00      1.00      1.00        28
           29       1.00      0.98      0.99        42
 
-    accuracy                           0.97      2921
-   macro avg       0.98      0.98      0.98      2921
-weighted avg       0.97      0.97      0.97      2921
+    accuracy                           0.97      2920
+   macro avg       0.98      0.97      0.97      2920
+weighted avg       0.97      0.97      0.97      2920
 
 Reports on dev set:
               precision    recall  f1-score   support
 
-           1       0.76      0.65      0.70        20
-           2       1.00      0.80      0.89        20
-          10       0.94      0.94      0.94       141
-          15       1.00      0.57      0.73         7
-          17       0.75      0.46      0.57        13
+           1       0.75      0.60      0.67        20
+           2       0.87      1.00      0.93        20
+          10       0.95      0.95      0.95       142
+          15       1.00      0.86      0.92         7
+          17       0.86      0.43      0.57        14
           19       1.00      0.80      0.89         5
-          20       0.85      0.93      0.88        54
-          22       0.76      0.79      0.77        70
-          23       0.91      0.91      0.91        32
-          24       0.87      0.87      0.87       229
-          25       0.82      0.96      0.88        99
-          26       0.79      0.69      0.73        16
-          27       0.86      0.75      0.80         8
+          20       0.91      0.96      0.94        53
+          22       0.81      0.77      0.79        70
+          23       0.89      0.78      0.83        32
+          24       0.86      0.88      0.87       228
+          25       0.83      0.95      0.89        99
+          26       0.67      0.62      0.65        16
+          27       1.00      0.75      0.86         8
           28       1.00      0.71      0.83         7
           29       1.00      0.80      0.89        10
 
     accuracy                           0.87       731
-   macro avg       0.89      0.77      0.82       731
-weighted avg       0.87      0.87      0.86       731
+   macro avg       0.89      0.79      0.83       731
+weighted avg       0.87      0.87      0.87       731
 </pre></div>
 </div>
 </div>
@@ -3413,48 +3452,48 @@ weighted avg       0.87      0.87      0.86       731
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reports on train set:
               precision    recall  f1-score   support
 
-           1       1.00      1.00      1.00        80
-           2       1.00      0.96      0.98        80
-          10       1.00      1.00      1.00       562
-          15       1.00      1.00      1.00        26
-          17       0.98      0.98      0.98        53
+           1       1.00      1.00      1.00        81
+           2       1.00      0.97      0.99        79
+          10       1.00      1.00      1.00       566
+          15       1.00      0.96      0.98        26
+          17       0.98      0.96      0.97        56
           19       1.00      0.89      0.94        19
-          20       1.00      1.00      1.00       217
-          22       1.00      0.98      0.99       278
+          20       1.00      1.00      1.00       212
+          22       1.00      0.99      0.99       278
           23       1.00      0.98      0.99       128
-          24       0.98      1.00      0.99       915
-          25       1.00      1.00      1.00       394
-          26       1.00      0.98      0.99        65
+          24       0.98      1.00      0.99       911
+          25       1.00      1.00      1.00       395
+          26       1.00      0.97      0.98        65
           27       1.00      1.00      1.00        34
           28       1.00      1.00      1.00        28
           29       1.00      1.00      1.00        42
 
-    accuracy                           0.99      2921
-   macro avg       1.00      0.98      0.99      2921
-weighted avg       0.99      0.99      0.99      2921
+    accuracy                           0.99      2920
+   macro avg       1.00      0.98      0.99      2920
+weighted avg       0.99      0.99      0.99      2920
 
 Reports on dev set:
               precision    recall  f1-score   support
 
-           1       1.00      0.60      0.75        20
-           2       1.00      0.90      0.95        20
-          10       0.95      0.95      0.95       141
-          15       1.00      0.57      0.73         7
-          17       0.86      0.46      0.60        13
-          19       1.00      0.80      0.89         5
-          20       0.91      0.89      0.90        54
-          22       0.92      0.70      0.80        70
-          23       1.00      0.94      0.97        32
-          24       0.80      0.91      0.85       229
-          25       0.85      1.00      0.92        99
-          26       0.77      0.62      0.69        16
+           1       0.92      0.55      0.69        20
+           2       1.00      1.00      1.00        20
+          10       0.96      0.96      0.96       142
+          15       1.00      0.86      0.92         7
+          17       1.00      0.50      0.67        14
+          19       1.00      0.60      0.75         5
+          20       0.94      0.89      0.91        53
+          22       0.95      0.77      0.85        70
+          23       1.00      0.88      0.93        32
+          24       0.79      0.92      0.85       228
+          25       0.88      0.97      0.92        99
+          26       0.79      0.69      0.73        16
           27       1.00      0.75      0.86         8
           28       1.00      0.71      0.83         7
           29       1.00      0.80      0.89        10
 
-    accuracy                           0.88       731
-   macro avg       0.94      0.77      0.84       731
-weighted avg       0.89      0.88      0.87       731
+    accuracy                           0.89       731
+   macro avg       0.95      0.79      0.85       731
+weighted avg       0.90      0.89      0.88       731
 </pre></div>
 </div>
 </div>
@@ -3477,9 +3516,90 @@ weighted avg       0.89      0.88      0.87       731
 <div class="section" id="save-model">
 <h3>Save Model<a class="headerlink" href="#save-model" title="Permalink to this headline">¶</a></h3>
 <p>Untuk keperluan prediksi, kita harus menyimpan model yang sudah kita latih sehingga dapat digunakan oleh pengguna, baik itu melalui <em>deployment</em> atau riset. Kita bisa gunakan <code class="docutils literal notranslate"><span class="pre">joblib</span></code> untuk menyimpan model <em>random forest</em> yang sudah kita latih tadi.</p>
+<p>Tapi sebelum itu, kita juga harus simpan langkah-langkah pemrosesan teks TF-IDF ke dalam model. Oleh karena itu, kita akan buat sebuah <em>model pipeline</em> menggunakan <code class="docutils literal notranslate"><span class="pre">sklearn.pipeline.Pipeline</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">random_forest_grid_search</span><span class="o">.</span><span class="n">best_estimator_</span><span class="p">,</span> <span class="s2">&quot;model/model.joblib&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s2">&quot;vectorizer&quot;</span><span class="p">,</span> <span class="n">TfidfVectorizer</span><span class="p">(</span>
+        <span class="n">min_df</span><span class="o">=</span><span class="mf">.015</span><span class="p">,</span>
+        <span class="n">max_df</span><span class="o">=</span><span class="mf">.7</span><span class="p">,</span>
+        <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">)),</span>
+    <span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">RandomForestClassifier</span><span class="p">(</span>
+        <span class="n">max_depth</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+        <span class="n">n_estimators</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="mi">11</span>
+    <span class="p">))</span>
+<span class="p">])</span>
+
+<span class="c1"># training</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_dev</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reports on train set:&quot;</span><span class="p">,</span>
+      <span class="n">classification_report</span><span class="p">(</span>
+          <span class="n">y_train</span><span class="p">,</span>
+          <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+      <span class="p">),</span>
+      <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reports on dev set:&quot;</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">y_dev</span><span class="p">,</span> <span class="n">pred</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reports on train set:
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00        81
+           2       1.00      0.97      0.99        79
+          10       1.00      0.99      1.00       566
+          15       1.00      0.96      0.98        26
+          17       0.98      0.95      0.96        56
+          19       1.00      0.89      0.94        19
+          20       1.00      1.00      1.00       212
+          22       1.00      0.99      0.99       278
+          23       1.00      0.98      0.99       128
+          24       0.98      1.00      0.99       911
+          25       1.00      1.00      1.00       395
+          26       1.00      0.94      0.97        65
+          27       1.00      1.00      1.00        34
+          28       1.00      1.00      1.00        28
+          29       1.00      1.00      1.00        42
+
+    accuracy                           0.99      2920
+   macro avg       1.00      0.98      0.99      2920
+weighted avg       0.99      0.99      0.99      2920
+
+Reports on dev set:
+              precision    recall  f1-score   support
+
+           1       0.92      0.55      0.69        20
+           2       1.00      1.00      1.00        20
+          10       0.96      0.96      0.96       142
+          15       1.00      0.86      0.92         7
+          17       1.00      0.50      0.67        14
+          19       1.00      0.60      0.75         5
+          20       0.96      0.87      0.91        53
+          22       0.95      0.74      0.83        70
+          23       1.00      0.88      0.93        32
+          24       0.79      0.93      0.85       228
+          25       0.86      0.97      0.91        99
+          26       0.83      0.62      0.71        16
+          27       1.00      0.75      0.86         8
+          28       1.00      0.71      0.83         7
+          29       1.00      0.80      0.89        10
+
+    accuracy                           0.88       731
+   macro avg       0.95      0.78      0.85       731
+weighted avg       0.89      0.88      0.88       731
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;model/model.joblib&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -3498,14 +3618,14 @@ weighted avg       0.89      0.88      0.87       731
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;bootstrap&#39;: True, &#39;ccp_alpha&#39;: 0.0, &#39;class_weight&#39;: None, &#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 50, &#39;max_features&#39;: &#39;auto&#39;, &#39;max_leaf_nodes&#39;: None, &#39;max_samples&#39;: None, &#39;min_impurity_decrease&#39;: 0.0, &#39;min_samples_leaf&#39;: 1, &#39;min_samples_split&#39;: 2, &#39;min_weight_fraction_leaf&#39;: 0.0, &#39;n_estimators&#39;: 125, &#39;n_jobs&#39;: None, &#39;oob_score&#39;: False, &#39;random_state&#39;: 11, &#39;verbose&#39;: 0, &#39;warm_start&#39;: False}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;memory&#39;: None, &#39;steps&#39;: [(&#39;vectorizer&#39;, TfidfVectorizer(max_df=0.7, min_df=0.015)), (&#39;model&#39;, RandomForestClassifier(max_depth=50, n_estimators=75, random_state=11))], &#39;verbose&#39;: False, &#39;vectorizer&#39;: TfidfVectorizer(max_df=0.7, min_df=0.015), &#39;model&#39;: RandomForestClassifier(max_depth=50, n_estimators=75, random_state=11), &#39;vectorizer__analyzer&#39;: &#39;word&#39;, &#39;vectorizer__binary&#39;: False, &#39;vectorizer__decode_error&#39;: &#39;strict&#39;, &#39;vectorizer__dtype&#39;: &lt;class &#39;numpy.float64&#39;&gt;, &#39;vectorizer__encoding&#39;: &#39;utf-8&#39;, &#39;vectorizer__input&#39;: &#39;content&#39;, &#39;vectorizer__lowercase&#39;: True, &#39;vectorizer__max_df&#39;: 0.7, &#39;vectorizer__max_features&#39;: None, &#39;vectorizer__min_df&#39;: 0.015, &#39;vectorizer__ngram_range&#39;: (1, 1), &#39;vectorizer__norm&#39;: &#39;l2&#39;, &#39;vectorizer__preprocessor&#39;: None, &#39;vectorizer__smooth_idf&#39;: True, &#39;vectorizer__stop_words&#39;: None, &#39;vectorizer__strip_accents&#39;: None, &#39;vectorizer__sublinear_tf&#39;: False, &#39;vectorizer__token_pattern&#39;: &#39;(?u)\\b\\w\\w+\\b&#39;, &#39;vectorizer__tokenizer&#39;: None, &#39;vectorizer__use_idf&#39;: True, &#39;vectorizer__vocabulary&#39;: None, &#39;model__bootstrap&#39;: True, &#39;model__ccp_alpha&#39;: 0.0, &#39;model__class_weight&#39;: None, &#39;model__criterion&#39;: &#39;gini&#39;, &#39;model__max_depth&#39;: 50, &#39;model__max_features&#39;: &#39;auto&#39;, &#39;model__max_leaf_nodes&#39;: None, &#39;model__max_samples&#39;: None, &#39;model__min_impurity_decrease&#39;: 0.0, &#39;model__min_samples_leaf&#39;: 1, &#39;model__min_samples_split&#39;: 2, &#39;model__min_weight_fraction_leaf&#39;: 0.0, &#39;model__n_estimators&#39;: 75, &#39;model__n_jobs&#39;: None, &#39;model__oob_score&#39;: False, &#39;model__random_state&#39;: 11, &#39;model__verbose&#39;: 0, &#39;model__warm_start&#39;: False}
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">dev_tfidf</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_dev</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_dev</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -3513,25 +3633,25 @@ weighted avg       0.89      0.88      0.87       731
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>              precision    recall  f1-score   support
 
-           1       1.00      0.60      0.75        20
-           2       1.00      0.90      0.95        20
-          10       0.95      0.95      0.95       141
-          15       1.00      0.57      0.73         7
-          17       0.86      0.46      0.60        13
-          19       1.00      0.80      0.89         5
-          20       0.91      0.89      0.90        54
-          22       0.92      0.70      0.80        70
-          23       1.00      0.94      0.97        32
-          24       0.80      0.91      0.85       229
-          25       0.85      1.00      0.92        99
-          26       0.77      0.62      0.69        16
+           1       0.92      0.55      0.69        20
+           2       1.00      1.00      1.00        20
+          10       0.96      0.96      0.96       142
+          15       1.00      0.86      0.92         7
+          17       1.00      0.50      0.67        14
+          19       1.00      0.60      0.75         5
+          20       0.96      0.87      0.91        53
+          22       0.95      0.74      0.83        70
+          23       1.00      0.88      0.93        32
+          24       0.79      0.93      0.85       228
+          25       0.86      0.97      0.91        99
+          26       0.83      0.62      0.71        16
           27       1.00      0.75      0.86         8
           28       1.00      0.71      0.83         7
           29       1.00      0.80      0.89        10
 
     accuracy                           0.88       731
-   macro avg       0.94      0.77      0.84       731
-weighted avg       0.89      0.88      0.87       731
+   macro avg       0.95      0.78      0.85       731
+weighted avg       0.89      0.88      0.88       731
 </pre></div>
 </div>
 </div>
