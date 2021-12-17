@@ -132,4 +132,4 @@ dmypy.json
 _build/
 
 .DS_STORE
-.joblib
+*.joblib
