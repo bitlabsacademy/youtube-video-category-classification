@@ -2,6 +2,7 @@ import os
 
 import emoji
 import joblib
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -43,6 +44,10 @@ def get_model(model_path: str):
 model = get_model(c.MODEL_PATH)
 logo = Image.open(c.LOGO_PATH)
 dict_category = get_category_dict(c.CATEGORY_PATH)
+list_category_name = [
+    dict_category.get(str(label))
+    for label in model.classes_
+]
 
 st.title("YouTube Video Category Classification")
 st.subheader("based on Title and Description")
@@ -54,7 +59,9 @@ text = demojize(text)
 run_model = st.button("Classify")
 if run_model:
     prediction = model.predict([text])
-    category = dict_category.get(str(prediction[0]))
+    probs = pd.DataFrame(model.predict_proba([text]),
+                         columns=list_category_name)
+    probs.index = ["probability"]
+    category = dict_category.get(str(prediction[0]), "Unknown Category")
     st.write("Video category:", category)
-
-
+    st.bar_chart(probs.T, width=20)
